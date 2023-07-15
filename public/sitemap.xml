@@ -2,10 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>http://blog.opt.lockey.icu/posts/</loc>
+    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/</loc>
+    <loc>http://blog.opt.lockey.icu/</loc>
+    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>http://blog.opt.lockey.icu/learn/0-0-0/</loc>
+    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/learn/</loc>
+    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/music/</loc>
+    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/game/</loc>
+    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/link/</loc>
+    <lastmod>2023-07-16T00:41:07+08:00</lastmod>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/archives/</loc>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/search/</loc>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/categories/</loc>
+  </url><url>
+    <loc>http://blog.opt.lockey.icu/tags/</loc>
   </url>
 </urlset>

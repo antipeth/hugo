@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: http://blog.opt.lockey.icu/sitemap.xml

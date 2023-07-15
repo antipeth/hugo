@@ -1,0 +1,12 @@
+/* 在custom.css中添加 */
+
+.title {
+  background: linear-gradient(to right, #ff0000, #00ff00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 疯狂摇晃 */  
+.title {
+  animation: shake 0.5s infinite;
+}
