@@ -29,6 +29,8 @@ params:
   DateFormat: "January 2, 2006"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
+  twikoo:
+      version: 1.6.16
 
   ShowReadingTime: true
   ShowShareButtons: true
@@ -85,6 +87,7 @@ params:
     Title: "春风少年兄"
     Content: 你在世纪大道东门
   
+  comments: true
   socialIcons:
     - name: bilibili
       url: "https://space.bilibili.com/471598989"   
