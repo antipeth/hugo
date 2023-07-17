@@ -18,7 +18,7 @@ minify:
 defaultContentLanguage: zh # 最顶部首先展示的语言页面
 defaultContentLanguageInSubdir: true
 
-params:
+params: 
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   title: 春风少年兄
   description: "欢迎来到世纪大道"
@@ -152,7 +152,7 @@ markup:
   highlight:
     noClasses: false
     # anchorLineNos: true
-    # codeFences: true
+    codeFences: true
     # guessSyntax: true
     # lineNos: true
     # style: monokai
