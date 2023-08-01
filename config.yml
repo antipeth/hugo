@@ -1,4 +1,4 @@
-baseURL: "http://blog.opt.lockey.icu/"
+baseURL: "https://blog.0pt.im/"
 title: 春风少年兄
 paginate: 5
 theme: PaperMod
@@ -15,7 +15,7 @@ minify:
   disableXML: true
   minifyOutput: true
 
-defaultContentLanguage: zh # 最顶部首先展示的语言页面
+defaultContentLanguage:  # 最顶部首先展示的语言页面
 defaultContentLanguageInSubdir: true
 
 params: 
@@ -51,11 +51,11 @@ params:
   assets:
     # disableHLJS: true # to disable highlight.js
     # disableFingerprinting: true
-    favicon: "https://img.opt.lockey.icu/blogbuilt/title.jpeg"
-    favicon16x16: "https://img.opt.lockey.icu/blogbuilt/title.jpeg"
-    favicon32x32: "https://img.opt.lockey.icu/blogbuilt/title.jpeg"
-    apple_touch_icon: "https://img.opt.lockey.icu/blogbuilt/title.jpeg"
-    safari_pinned_tab: "https://img.opt.lockey.icu/blogbuilt/title.jpeg"
+    favicon: "https://img.0pt.im/blogbuilt/title.jpeg"
+    favicon16x16: "https://img.0pt.im/blogbuilt/title.jpeg"
+    favicon32x32: "https://img.0pt.im/blogbuilt/title.jpeg"
+    apple_touch_icon: "https://img.0pt.im/blogbuilt/title.jpeg"
+    safari_pinned_tab: "https://img.0pt.im/blogbuilt/title.jpeg"
 
   label:
     text: "世纪大道"
@@ -67,7 +67,7 @@ params:
     enabled: true # needs to be explicitly set
     title: 春风少年兄
     subtitle: "你在世纪大道东门"
-    imageUrl: "https://img.opt.lockey.icu/blogbuilt/title.jpeg"
+    imageUrl: "https://img.0pt.im/blogbuilt/title.jpeg"
     imageWidth: 120
     imageHeight: 120
     imageTitle: image
@@ -138,14 +138,18 @@ menu:
       name: 游
       url: /game/
       weight: 40
+    - identifier: 感
+      name: 感
+      url: /think/
+      weight: 50  
     - identifier: 链
       name: 链
       url: /link/
-      weight: 50
+      weight: 60
     - identifier: 时
       name: 时
       url: /archives
-      weight: 60  
+      weight: 70  
 # Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
 markup:

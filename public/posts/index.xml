@@ -2,15 +2,15 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on 春风少年兄</title>
-    <link>http://blog.opt.lockey.icu/posts/</link>
+    <link>https://blog.0pt.im/posts/</link>
     <description>Recent content in Posts on 春风少年兄</description>
     <image>
       <title>春风少年兄</title>
-      <url>http://blog.opt.lockey.icu/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
-      <link>http://blog.opt.lockey.icu/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+      <url>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 16 Jul 2023 18:09:28 +0800</lastBuildDate><atom:link href="http://blog.opt.lockey.icu/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 21 Jul 2023 18:09:28 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/posts/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

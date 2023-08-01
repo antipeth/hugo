@@ -1,52 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>http://blog.opt.lockey.icu/posts/</loc>
-    <lastmod>2023-07-16T18:09:28+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/</loc>
-    <lastmod>2023-07-16T18:09:28+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/1-2-1/</loc>
-    <lastmod>2023-07-16T18:09:28+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/1-1-5/</loc>
-    <lastmod>2023-07-16T18:09:11+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/1-1-4/</loc>
-    <lastmod>2023-07-16T18:09:05+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/1-1-3/</loc>
-    <lastmod>2023-07-16T18:08:39+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/1-1-2/</loc>
-    <lastmod>2023-07-16T18:08:21+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/1-1-1/</loc>
-    <lastmod>2023-07-16T18:08:07+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/0-0-0/</loc>
-    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/learn/</loc>
-    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/music/</loc>
-    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/game/</loc>
-    <lastmod>2023-07-16T00:48:58+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/link/</loc>
-    <lastmod>2023-07-16T00:41:07+08:00</lastmod>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/archives/</loc>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/search/</loc>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/categories/</loc>
-  </url><url>
-    <loc>http://blog.opt.lockey.icu/tags/</loc>
-  </url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <sitemap>
+    <loc>https://blog.0pt.im/sitemap.xml</loc>
+    
+      <lastmod>2023-07-21T18:09:28+08:00</lastmod>
+    
+  </sitemap>
+  
+</sitemapindex>
