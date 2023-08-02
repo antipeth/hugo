@@ -15,7 +15,7 @@ minify:
   disableXML: true
   minifyOutput: true
 
-defaultContentLanguage:  # 最顶部首先展示的语言页面
+defaultContentLanguage: zh # 最顶部首先展示的语言页面
 defaultContentLanguageInSubdir: true
 
 params: 

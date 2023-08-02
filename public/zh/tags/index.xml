@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on 春风少年兄</title>
+    <link>https://blog.0pt.im/zh/tags/</link>
+    <description>Recent content in Tags on 春风少年兄</description>
+    <image>
+      <title>春风少年兄</title>
+      <url>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 21 Jul 2023 18:09:28 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机网络</title>
+      <link>https://blog.0pt.im/zh/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Fri, 21 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/zh/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>随感</title>
+      <link>https://blog.0pt.im/zh/tags/%E9%9A%8F%E6%84%9F/</link>
+      <pubDate>Sun, 16 Jul 2023 00:48:58 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/zh/tags/%E9%9A%8F%E6%84%9F/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
