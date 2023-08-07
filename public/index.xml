@@ -11,7 +11,1528 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 21 Jul 2023 18:09:28 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 07 Aug 2023 18:09:28 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从零开始的计算机网络5-8</title>
+      <link>https://blog.0pt.im/learn/1-5-8/</link>
+      <pubDate>Mon, 07 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-8/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="tcp的运输连接管理">TCP的运输连接管理</h1>
+<h3 id="tcp的连接建立">TCP的连接建立</h3>
+<p>TCP是面向连接的协议，它基于运输连接来传送TCP报文段。</p>
+<p>TCP运输连接的建立和释放是每一次面向连接的通信中必不可少的过程。</p>
+<p>TCP运输连接有以下三个阶段:</p>
+<ul>
+<li>
+<p>建立TCP连接</p>
+</li>
+<li>
+<p>数据传送</p>
+</li>
+<li>
+<p>释放TCP连接</p>
+</li>
+</ul>
+<p>TCP的运输连接管理就是使运输连接的建立和释放都能正常地进行。</p>
+<p>TCP的连接建立要解决以下三个问题:</p>
+<ul>
+<li>
+<p>使TCP双方能够确知对方的存在;</p>
+</li>
+<li>
+<p>使TCP双方能够协商一些参数（如最大窗口值、是否使用窗口扩大选项和时间戳选项以及服务质量等）；</p>
+</li>
+<li>
+<p>使TCP双方能够对运输实体资源（如缓存大小、连接表中的项目等）进行分配。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-8/5-8-1.png" alt=""  />
+</p>
+<p><strong>TCP连接请求报文段</strong>首部中的同步位SYN被设置为1，表明这是一个TCP请求报文段。</p>
+<p>序号字段seq被设置了一个初始值x，作为TCP客户进程方选择的初始序号。</p>
+<p>请准意：TGP规定SYN被设置为1的报文段不能携带数据，但要消耗掉一个序号。</p>
+<p><strong>针对TCP连接请求的确认报文段</strong>首部中的同步位SYN和确认位ACK都设置为1，表明这是一个TCP连接请求确认报文段。序号字段seq被设置了─个初始值y，作为TCP服务器进程诚选择的初始序号。确认号字段adk的值被设置成了x+1，这是对TP客户进程所选择的初始序号的确认。</p>
+<p>请注意：这个报文段也不能携带数据，因为它是SYN被设置为1的报文段，但同样要消耗掉一个序号。</p>
+<p>针对TCP连接请求的确认的确认报文段首部中的确认位ACK被设置为1，表明这是一个普通的TCP确认报文段。序号字段seq被设置为x+1，这是因为MGP客户进程发送的第一个TCP报文段的序号为X，并且不携带数据，因此第二个报文段的序号为x+1。</p>
+<p>请注意:TCP规定普通的TCP确认报文段可以携带数据，但如果不携带数据，则不消耗序号。在这种情况下，所发送的下一个数据报文段的序号仍是x+1。</p>
+<p>确认号字段ack被设置为y+1，这是对TCP服务器进程所选择的初始序号的确认。TCP服务器递程收到该确认报文段后也进入连接已建立状态。</p>
+<p>为什么最后要发针对TCP连接请求的确认的确认报文段？</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-8/5-8-2.png" alt=""  />
+</p>
+<p>这是为了防止已失效的连接请求报文段突然又传送到了TCP服务器，因而导致错误。</p>
+<p>例题：主机甲向主机乙发送一个(SYN=1,seq=11220)的TCP段，期望与主机乙建立TCP连接，若主机乙接受该连接请求，则主机乙向主机甲发送的正确的TCP段可能是</p>
+<p>A.(SYN=0，ACK=0, seq=11221, ack=11221)    B.(SYN=1，ACK=1, seq=11220, ack=11220)</p>
+<p>C.(SYN=1，ACK=1, seq=11221, ack=11221)    D.(SYN=0，ACK=0, seq=11220,ack=11220)</p>
+<p>解析：见上文，选C。</p>
+<h3 id="tcp的连接释放">TCP的连接释放</h3>
+<p>TCP通过“四报文挥手”来释放连接</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-8/5-8-3.png" alt=""  />
+</p>
+<p>该报文段首部中的终止位FIN和确认位ACK的值都被设置为1，表明这是一个TCP接释放报文段，同时世对之前收到的报文段进行确认。序号seq字段的值设置为u，它等于TCP客户进程之前已传送过的、数据的最后一个字节的序号加1。</p>
+<p>请注意：TCP规定终止位FN等于1的报文段即使不携带数据，也要消耗掉一个序号。</p>
+<p>确认号ack字段的值设置为v，它等于TCP客户进程之前已收到的、数据的最局一个字节的序号加1。</p>
+<p>TCP服务器进程收到TCP连接释放报文段后，会发送一个普通的TCP确认报文段养进入关闭等待状态。</p>
+<p>该报文段首部中的确认位ACK的值被设置为1，表明这是一个普通的TCP确认报文段。序号seq字段的值设置为v，它等于TCP服务器进程之前已传送过的数据的最后一个字节的序号加1。确认号adk字段的值设置为u+1，这是对TCP连接释放报文段的确认。TCP服务器进程这时应通知高层应用进程：TCP客户进程要断开与自己的TCP连接。此时，从TGP客户进程到TCP服务器进程这个方向的连接就释放了。这时的TCP连接属于半关闭状态，也就是TCP客户进程已经没有数据要发送了。但如果TCP服务器进程仍有数据要发送，TCP客户进程仍要接收。</p>
+<p>也就是说，从TCP服务器进程到TCP客户进程这个方向的连接并未关闭。</p>
+<p>TCP客户进程收到TCP确认报文段后就入终止等待2状态。等待TCP服务器进程发出的TCP连接释放报文段。若使用TCP服务器进程的应用进程已经没有数据要发送了，应用进程就通知其TCP服务器进程释放连接。由于TCP连接释放是由TCP客户进程主动发起的，因此TCP服务器进程对TCP连接的释放称为被动关闭连接。</p>
+<p>TCP服务器进程发送TCP连接释放报文段并进入最后确认状态。该报文段省部中的终止位FIN和确认位ACK的值都被设置为1，表明这是一个TCP连接释放报文段，同时也对之前收到的报文段进行确认。现在假定序号seq字段的值为w。这是因为在半关闭状态下 ，TCP服务器进程可能又发送了一些数据。确认号ack字段的值为u+1，这是对之前收到的TCP连接释放报文段的重复确认。TCP客户进程收到TCP连接释放报文段后，必须针对该报文段发送普通的TCP确认报文段，之后进入时间等待状态。该报文段首部中的确认位ACK的值被设置为1，表明这是一个普通的TCP确认报文段。序号seq字段的值设置为u+1，这是因为TCP客户进程之前的TCP连接释放报文段虽然不携带数据，但要消耗掉一个序号。确认号ack字段的值设置为w+1，这是对所接受到的TCP连接释放报文段的确认。TCP服务器进程收到该报文段后就进入关闭状态。而TCP客户进程还要经过2MSL后才能进入关闭状态。</p>
+<p>MSL(Maximum Segment Lifetime)意思是最长报文段寿命，RFC793建议为2分种。</p>
+<p>为什么不直接进入关闭状态而是还要等待2MSL？</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-8/5-8-4.png" alt=""  />
+</p>
+<p>TCP服务器进程每收到一次TCP客户进程的数据，就重新设置并启动<strong>保活计时器</strong>（2小时定时）。</p>
+<p>若保活计时器定时周期内未收到TCP客户进程发来的数据，则<strong>当保活计时器到时后，TCP服务器进程就向TCP客户进程发送一个探测报文段</strong>，以后则每隔75秒钟发送一次。若一连发送10个探测报文段后仍无TCP客户进程的响应，TCP服务器进程就认为TCP客户进程所在主机出了故障接着就关闭这个连接。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-7</title>
+      <link>https://blog.0pt.im/learn/1-5-7/</link>
+      <pubDate>Sun, 06 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-7/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="tcp可靠传输的实现">TCP可靠传输的实现</h1>
+<p>TCP基于<strong>以字节为单位的滑动窗口</strong>来实现可靠传输</p>
+<p>虽然发送方的发送窗口是根据接收方的接收窗口设置的，但在同一时刻，发送方的<strong>发送窗口并不总是和接收方的接收窗口</strong>一样大。</p>
+<ul>
+<li>
+<p>网络传送窗口值需要经历一定的时间滞后，并且这个时间还是不确定的。</p>
+</li>
+<li>
+<p>发送方还可能根据网络当时的拥塞情况适当减小自己的发送窗口尺寸。</p>
+</li>
+</ul>
+<p>对于<strong>不按序到达的数据应如何处理</strong>，TCP并无明确规定。</p>
+<ul>
+<li>
+<p>如果接收方把不按序到达的数据一律丢弃，那么接收窗口的管理将会比较简单，但这样做对网络资源的利用不利,因为发送方会重复传送较多的数据。</p>
+</li>
+<li>
+<p>TCP通常对不按序到达的数据是先临时存放在接收窗口中，等到字节流中所缺少的字节收到后，再<strong>按序交付上层的应用进程</strong>。</p>
+</li>
+</ul>
+<p>TCP要求接收方必须有<strong>累积确认和捎带确认机制</strong>，这样可以减小传输开销。接收方可以在合适的时候发送确认，也可以在自己有数据要发送时把确认信息顺便捎带上。</p>
+<ul>
+<li>
+<p>接收方不应过分推迟发送确认，否则会导致发送方不必要的超时重传，这反而浪费了网络的资源。</p>
+</li>
+<li>
+<p>TCP标准规定，确认推迟的时间不应超过0.5秒。若收到一连串具有最大长度的报文段，则必须每隔-个报文段就发送一个确认[RFC 1122]。</p>
+</li>
+<li>
+<p>捎带确认实际上并不经常发生，因为大多数应用程序很少同时在两个方向上发送数据。</p>
+</li>
+</ul>
+<p><strong>TCP的通信是全双工通信</strong>。通信中的每一方都在发送和接收报文段。因此，每一方都有自己的发送窗口和接收窗口。在谈到这些窗口时，一定要弄清楚是哪一方的窗口。</p>
+<p>例题：主机甲与主机乙之间已建立一个TCP连接，主机甲向主机乙发送了两个连续的TCP段，分别包含300字节和500字节的有效载荷，第一个段的序号为200，主机乙正确接收到两个段后，发送给主机甲的确认序号是</p>
+<p>A.500    B.700    C.800    D.1000</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-7/5-7-1.png" alt=""  />
+</p>
+<p>选D</p>
+<p>例题：主机甲与主机乙之间已建立一个TCP连接，主机甲向主机乙发送了3个连续的TCP段，分别包含300字节、400字节和500字节的有效载荷，第3个段的序号为900。若主机乙仅正确接收到第1个和第3个段，则主机乙发送给主机甲的确认序号是</p>
+<p>A.300    B.500    C.1200    D.1400</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-7/5-7-2.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-6</title>
+      <link>https://blog.0pt.im/learn/1-5-6/</link>
+      <pubDate>Sat, 05 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-6/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="tcp超时重传时间的选择">TCP超时重传时间的选择</h1>
+<p>超时重传时间的选择是TCP最复杂的问题之一</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-6/5-6-1.png" alt=""  />
+</p>
+<p><strong>不能直接使用某次测量得到的RTT样本来计算超时重传时间RTO</strong>。</p>
+<p>利用每次测量得到的RTT样本，计算加权平均<strong>往返时间RTTs</strong>（又称为平滑的往返时间）。</p>
+<p>RTTs = RTT1</p>
+<p><strong>新的RTTs = (l - α) ×旧的RTTs+α ×新的RTT样本</strong></p>
+<p>在上式中,0 ≤a &lt;1 :</p>
+<p>若α很接近于0，则新RTT样本对RTTs的影响不大;</p>
+<p>若α很接近于1，则新RTT样本对RTTs的影响较大;</p>
+<p>已成为建议标准的RFC6298推荐的α值为1/8，即0.125。</p>
+<p>用这种方法得出的加权平均往返时间RTTs就比测量出的RTT值更加平滑。</p>
+<p>显然，<strong>超时重传时间RTO应略大于加权平均往返时间RTTs</strong>。</p>
+<p>RFC6298建议使用下式计算超时重传时间RTO:</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-6/5-6-2.png" alt=""  />
+</p>
+<p>往返时间RTT的测量比较复杂</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-6/5-6-3.png" alt=""  />
+</p>
+<p>源主机若误将确认当作是对原报文段的确认:</p>
+<p>所计算出的RTTs和RTO就会偏大，降低了传输效率;</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-6/5-6-4.png" alt=""  />
+</p>
+<p>源主机若误将确认当作是对重传报文段的确认：</p>
+<p>所计算出的RTTs和RTO就会偏小，导致报文段没必要的重传，增大网络负荷;</p>
+<p>针对<strong>出现超时重传时无法测准往返时间RTT</strong>的问题，<strong>Karn</strong>提出了一个<strong>算法</strong>:<strong>在计算加权平均往返时间RTTs时</strong>，<strong>只要报文段重传了，就不采用其往返时间RTT样本</strong>。也就是出现重传时，不重新计算RTTs，进而超时重传时间RTO也不会重新计算。</p>
+<p>这又引起了新的问题。设想出现这样的情况:报文段的时延突然增大了很多，并且之后很长一段时间都会保持这种时延。因此在原来得出的重传时间内，不会收到确认报文段。于是就重传报文段。但根据Karn算法，不考虑重传的报文段的往返时间样本。这样，超时重传时间就无法更新。这会导致报文段反复被重传。</p>
+<p>因此，要对<strong>Karn算法进行修正</strong>。方法是：<strong>报文段每重传一次，就把超时重传时间RTO增大一些</strong>。典型的做法是将新RTO的值取为旧RTO值的2倍。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-6/5-6-5.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-5</title>
+      <link>https://blog.0pt.im/learn/1-5-5/</link>
+      <pubDate>Fri, 04 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-5/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="tcp的拥塞控制">TCP的拥塞控制</h1>
+<p>在某段时间，若<strong>对网络中某一资源的需求超过了该资源所能提供的可用部分</strong>，网络性能就要变坏，这种情况就叫做拥塞(congestion)。</p>
+<p>在计算机网络中的链路容量（即带宽）、交换结点中的缓存和处理机等，都是网络的资源。若<strong>出现拥塞而不进行控制</strong>，整个网络的<strong>吞吐量将随输入负荷的增大而下降</strong>。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-5/5-5-1.png" alt=""  />
+</p>
+<ul>
+<li>
+<p>慢开始(slow-start)</p>
+</li>
+<li>
+<p>拥塞避免(congestion avoidance)</p>
+</li>
+<li>
+<p>快重传(fast retransmit)</p>
+</li>
+<li>
+<p>快恢复(fast recovery)</p>
+</li>
+</ul>
+<p>下面介绍这四种拥塞控制算法的基本原理，假定如下条件:</p>
+<ul>
+<li>
+<p>数据是单方向传送，而另一个方向只传送确认。</p>
+</li>
+<li>
+<p>接收方总是有足够大的缓存空间，因而发送方发送窗口的大小由网络的拥塞程度来决定。</p>
+</li>
+<li>
+<p>以最大报文段MSS的个数为讨论问题的单位，而不是以字节为单位。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-5/5-5-2.png" alt=""  />
+</p>
+<p>发送方维护一个叫做<strong>拥塞窗口cwnd</strong>的状态变量，其值<strong>取决于网络的拥塞程度</strong>，并且<strong>动态变化</strong>。</p>
+<ul>
+<li>
+<p>拥塞窗口<strong>cwnd的维护原则</strong>:只要网络<strong>没有出现拥塞</strong>，<strong>拥塞窗口</strong>就再<strong>增大</strong>一些;但只要网络<strong>出现拥塞</strong>，<strong>拥塞窗口就减少</strong>一些。</p>
+</li>
+<li>
+<p>判断出现<strong>网络拥塞的依据</strong>:没有按时收到应当到达的确认报文（即<strong>发生超时重传</strong>）。</p>
+</li>
+</ul>
+<p>发送方将拥塞窗口作为<strong>发送窗口swnd</strong>，即<strong>swnd = cwnd</strong>。</p>
+<p>维护一个慢开始门限<strong>ssthresh</strong>状态变量:</p>
+<ul>
+<li>
+<p>当cwnd &lt; ssthresh时，使用慢开始算法;</p>
+</li>
+<li>
+<p>当cwnd &gt; ssthresh时，停止使用慢开始算法而改用拥塞避免算法;</p>
+</li>
+<li>
+<p>当cwnd = ssthresh时，既可使用慢开始算法，也可使用拥塞避免算法。</p>
+</li>
+</ul>
+<p>设初始时cwnd = 1，ssthresh = 16</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-5/5-5-3.png" alt=""  />
+</p>
+<p>“慢开始”是指一开始向网络注入的报文段少，并不是指拥塞窗口cwnd增长速度慢;</p>
+<p>“拥塞避免”并非指完全能够避免拥塞，而是指在拥塞避免阶段将拥塞窗口控制为按线性规律增长，使网络比较不容易出现拥塞;</p>
+<p>慢开始和拥塞避免算法是1988年提出的TCP拥塞控制算法(TCP Tahoe版本)。</p>
+<p>1990年又增加了两个新的拥塞控制算法（<strong>改进TCP的性能</strong>），这就是快重传和快恢复（TCP Reno版本)。有时，<strong>个别报文段</strong>会在网络中<strong>丢失</strong>，但实际上网络<strong>并未发生拥塞</strong>。</p>
+<ul>
+<li>
+<p>这将导致<strong>发送方</strong>超时重传，并<strong>误认为</strong>网络发生了<strong>拥塞</strong>;</p>
+</li>
+<li>
+<p><strong>发送方把拥塞窗口cwnd又设置为最小值1</strong>，并错误地启动慢开始算法，因而<strong>降低了传输效率</strong>。</p>
+</li>
+</ul>
+<p>采用快重传算法可以<strong>让发送方尽早知道发生了个别报文段的丢失</strong>。</p>
+<p>所谓快重传，就是使发送方<strong>尽快进行重传</strong>，而<strong>不是等超时重传计时器超时</strong>再重传。</p>
+<ul>
+<li>
+<p>要求接收方不要等待自己发送数据时才进行捎带确认，而是要<strong>立即发送确认</strong>;</p>
+</li>
+<li>
+<p>即使收到了失序的报文段也要立即发出对已收到的报文段的<strong>重复确认</strong>。</p>
+</li>
+<li>
+<p>发送方一旦收到<strong>3个连续的重复确认</strong>，就将相应的报文段<strong>立即重传</strong>，而不是等该报文段的超时重传计时器超时再重传。</p>
+</li>
+<li>
+<p>对于个别丢失的报文段，发送方不会出现超时重传，也就不会误认为出现了拥塞（进而降低拥塞窗口cwnd为1)。使用快重传可以使整个网络的吞吐量提高约20%。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-5/5-5-4.png" alt=""  />
+</p>
+<p><strong>发送方一旦收到3个重复确认</strong>，就知道现在只是丢失了个别的报文段。于是不启动慢开始算法，<strong>而执行快恢复算法</strong>;</p>
+<p>也有的快恢复实现是把快恢复开始时的拥塞窗口cwnd值再增大一些</p>
+<p>即等于新的ssthresh + 3。</p>
+<ul>
+<li>
+<p>既然发送方收到3个重复的确认，就表明有3个数据报文段已经离开了网络;</p>
+</li>
+<li>
+<p>这3个报文段不再消耗网络资源而是停留在接收方的接收缓存中;</p>
+</li>
+<li>
+<p>可见现在网络中不是堆积了报文段而是减少了3个报文段。因此可以适当把拥塞窗口扩大些</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-5/5-5-5.png" alt=""  />
+</p>
+<p>例题：一个TCP连接总是以1KB的最大段长发送TCP段，发送方有足够多的数据要发送。当拥塞窗口为16KB时发生了超时，如果接下来的4个RTT（往返时间)内的TCP段的传输都是成功的，那么当第4个RTT时间内发送的所有TCP段都得到肯定应答时，拥塞窗口大小是</p>
+<p>A.7KB        B.8KB        C.9KB        D.16KB</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-5/5-5-6.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-4</title>
+      <link>https://blog.0pt.im/learn/1-5-4/</link>
+      <pubDate>Thu, 03 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-4/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="tcp的流量控制">TCP的流量控制</h1>
+<p>一般来说，我们总是希望数据传输得更快一些。</p>
+<p>但如果发送方把数据发送得过快，接收方就可能来不及接收，这就会造成数据的丢失。</p>
+<p>所谓流量控制(flow control)就是<strong>让发送方的发送速率不要太快</strong>，<strong>要让接收方来得及接收</strong>。</p>
+<p>利用<strong>滑动窗口</strong>机制可以很方便地在TCP连接上实现对发送方的流量控制。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-4/5-4-1.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-4/5-4-2.png" alt=""  />
+</p>
+<blockquote>
+<p>ACK是TCP报文段首部的标志位，取值1表示这是一个TCP确认报文段。小写adk是TCP报文段首部中的确认号字段，取值201表示序号201之前的数据已全蔷R确接收，现在希望收到序号201及赏后续数据。rwnd是TCP报文段首部中的窗口字段，取值300表示自己的接收窗口大小为300。</p>
+</blockquote>
+<p>如果零窗口探测报文丢失，怎么办？</p>
+<p>零窗口探测报文段也有重传计时器。没事。</p>
+<p>例题：主机甲和主机乙之间建立了一个TCP连接，TCP最大段长度为1000字节。若主机甲的当前拥塞窗口为4000字节在主机甲向主机乙连续发送两个最大段后，成功收到主机乙发送的第一个段的确认段，确认段中通告的接收窗口大小为2000字节，则此时主机甲还可以向主机乙发送的最大字节数是</p>
+<p>A.1000    B.2000    C.3000    D.4000</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-4/5-4-3.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-3</title>
+      <link>https://blog.0pt.im/learn/1-5-3/</link>
+      <pubDate>Wed, 02 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-3/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="udp和tcp的对比">UDP和TCP的对比</h1>
+<p>UDP和TCP是TCP/IP体系结构运输层中的两个重要协议</p>
+<h3 id="用户数据报协议udpuser-datagram-protocol">用户数据报协议UDP(User Datagram Protocol)</h3>
+<p>1.无连接的UDP</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-1.png" alt=""  />
+</p>
+<p>2.UDP支持单播、多播以及广播</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-3.png" alt=""  />
+</p>
+<p>3.UDP是面向应用报文的</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-5.png" alt=""  />
+</p>
+<p>4.UDP向上层提供无连接不可靠传输服务（适用于IP电话、视频会议等实时应用）</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-9.png" alt=""  />
+</p>
+<p>5.UDP用户数据包首部仅8字节</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-10.png" alt=""  />
+ </p>
+<h3 id="传输控制协议tcptransmission-control-protocol">传输控制协议TCP(Transmission Control Protocol)</h3>
+<p>1.面向连接的TCP</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-2.png" alt=""  />
+</p>
+<p>2.TCP仅支持单播</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-4.png" alt=""  />
+</p>
+<p>3.TCP是面向字节流的</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-6.png" alt=""  />
+</p>
+<blockquote>
+<p>TCP并不知道数据报的含义，只是将其视为字节流，加载到发送缓存中发送。接收方的TCP也不知道数据报的含义，只是交付给应用进程，接收方的应用进程必须有能力识别接收到的字节流。</p>
+</blockquote>
+<p>4.TCP向上层提供面向连接的可靠传输服务（适用于要求可靠传输的应用，例如文件传输）</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-8.png" alt=""  />
+</p>
+<p>5.TCP报文段首部最小20字节，最大60字节</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-3/5-3-11.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-2</title>
+      <link>https://blog.0pt.im/learn/1-5-2/</link>
+      <pubDate>Tue, 01 Aug 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-2/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="运输层端口号复用与分用的概念">运输层端口号、复用与分用的概念</h1>
+<p>运行在计算机上的进程使用<strong>进程标识符PID</strong>来标志。</p>
+<p>因特网上的计算机并不是使用统一的操作系统，不同的操作系统(windows，Linux，Mac os)又使用<strong>不同格式的进程标识符</strong>。</p>
+<p>为了使运行不同操作系统的计算机的应用进程之间能够进行网络通信，就必须<strong>使用统一的方法对TCP/IP体系的应用进程进行标识</strong>。</p>
+<p>TCP/IP体系的运输层使用<strong>端口号</strong>来区分应用层的不同应用进程。</p>
+<p>端口号使用<strong>16比特表示</strong>，取值范围<strong>0~65535</strong>;</p>
+<ul>
+<li>
+<p>熟知端口号:0~1023，IANA把这些端口号指派给了TCP/IP体系中最重要的一些应用协议，例如:FTP使用21/20，HTTP使用80，DNS使用53。</p>
+</li>
+<li>
+<p>登记端口号:1024~49151，为没有熟知端口号的应用程序使用。使用这类端口号必须在IANA按照规定的手续登记，以防止重复。例如:Microsoft RDP微软远程桌面使用的端口是3389。</p>
+</li>
+<li>
+<p>短暂端口号:49152~65535，留给客户进程选择暂时使用。当服务器进程收到客户进程的报文时，就知道了客户进程所使用的动态端口号。通信结束后，这个端口号可供其他客户进程以后使用。</p>
+</li>
+</ul>
+<p><strong>端口号只具有本地意义</strong>，即端口号只是为了<strong>标识本计算机应用层中的各进程</strong>，在因特网中，<strong>不同计算机中的相同端口号是没有联系的</strong>。</p>
+<p>发送方的复用和接收方的分用</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-2/5-2-1.png" alt=""  />
+</p>
+<p>TCP/IP体系的应用层常用协议所使用的运输层熟知端口号</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-2/5-2-2.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-1</title>
+      <link>https://blog.0pt.im/learn/1-5-1/</link>
+      <pubDate>Mon, 31 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-1/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="运输层概述">运输层概述</h1>
+<p>之前课程所介绍的计算机网络体系结构中的<strong>物理层</strong>、<strong>数据链路层</strong>以及<strong>网络层</strong>它们共同解决了将主机通过异构网络互联起来所面临的问题，<strong>实现了主机到主机的通信</strong>。</p>
+<p>但实际上在计算机网络中进行<strong>通信的真正实体是位于通信两端主机中的进程</strong>(AP)。</p>
+<p><strong>如何为运行在不同主机上的应用进程提供直接的通信服务是运输层的任务</strong>，运输层协议又称为端到端协议。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-1/5-1-1.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-1/5-1-2.png" alt=""  />
+</p>
+<p>运输层向高层用户屏蔽了下面网络核心的细节(如网络拓扑、所采用的路由选择协议等)，它使应用进程看见的就<strong>好像是在两个运输层实体之间有一条端到端的逻辑通信信道</strong>。</p>
+<p>根据应用需求的不同，<strong>因特网的运输层</strong>为应用层提供了两种不同的运输协议，即<strong>面向连接的TCP</strong>和<strong>无连接的UDP</strong>，这两种协议就是本章要讨论的主要内容。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-9</title>
+      <link>https://blog.0pt.im/learn/1-4-9/</link>
+      <pubDate>Sun, 30 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-9/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="虚拟专用网vpn与网络地址转换nat">虚拟专用网VPN与网络地址转换NAT</h1>
+<h3 id="虚拟专用网vpnvirtual-private-network">虚拟专用网VPN(Virtual Private Network)</h3>
+<p><strong>利用公用的因特网</strong>作为本机构各专用网之间的通信载体，这样的专用网又称为虚拟专用网。由于IPv4地址的紧缺，一个机构能够申请到的IPv4地址数量往往远小于本机构所拥有的主机数量。因此，<strong>虚拟专用网中的各主机所分配的地址应该是本机构可自由分配的专用地址</strong>，而不是需要申请的、在因特网上使用的公有地址。</p>
+<p>专用(私有)地址:
+10.0.0.0~10.255.255.255(10/8地址块)
+172.16.0.0~172.31.255.255(172.16/12地址块)</p>
+<p>192.168.0.0~192.168.255.255(192.168/16地址块)</p>
+<blockquote>
+<p>私有地址只能用于机构内部通信，而不能用于和因特网上的主机通信。</p>
+</blockquote>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-9/4-9-1.png" alt=""  />
+</p>
+<p>从逻辑上看，R1和R2好像是一条直通的点对点链路。因此也被称为IP隧道技术</p>
+<p>同一机构内不同部门的内部网络所构成的虚拟专用网VPN又称为<strong>内联网VPN</strong>
+有时一个机构的VPN需要有某些外部机构（通常就是合作伙伴）参加进来。这样的VPN就称为<strong>外联网VPN</strong>，在外地工作的员工需要访问公司内部的专用网络时，只要在任何地点接入到因特网，运行驻留在员工PC中的VPN软件，在员工的PC和公司的主机之间建立VPN隧道，即可访问专用网络中的资源。这种VPN称为<strong>远程接入VPN</strong>。</p>
+<p>网络地址转换NAT(Network Address Translation)</p>
+<p>虽然因特网采用了无分类编址方式来减缓IPv4地址空间耗尽的速度，但由于因特网用户数目的激增，特别是大量小型办公室网络和家庭网络接入因特网的需求不断增加，IPv4地址空间即将面临耗尽的危险仍然没有被解除。</p>
+<p>1994年提出了一种网络地址转换NAT的方法再次<strong>缓解了IPv4地址空间即将耗尽的问题</strong>。</p>
+<p>NAT能使大量<strong>使用内部专用地址的专用网络用户共享少量外部全球地址来访问因特网上的主机和资源</strong>。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-9/4-9-2.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-9/4-9-3.png" alt=""  />
+</p>
+<p>该转换方法存在一个问题:如果NAT路由器具有N个全球IP地址，那么至多只能有N个内网主机能够同时和因特网上的主机通信。</p>
+<p>由于绝大多数的网络应用都是使用运输层协议TCP或UDP来传送数据，因此可以利用运输层的端口号和IP地址一起进行转换。这样，<strong>用一个全球IP地址就可以使多个拥有本地地址的主机同时和因特网上的主机进行通信</strong>。这种将端口号和IP地址一起进行转换的技术叫作<strong>网络地址与端口号转换NAPT</strong>(Network Address and Port Translation)。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-9/4-9-4.png" alt=""  />
+</p>
+<p>外网主机不能首先对内网中的主机发起通信，因为NAPT转换表里找不到相应记录。</p>
+<p>内网主机不能直接充当因特网服务器。</p>
+<p>对于一些P2P网络应用，需要外网主机主动与内网主机进行通信，在通过NAT时会遇到问题,需要网络应用自己使用一些特殊的NAT穿越技术来解决问题。</p>
+<p>另外，由于NAT对外网屏蔽了内网主机的网络地址，能为内网的主机提供一定的安全保护。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-8</title>
+      <link>https://blog.0pt.im/learn/1-4-8/</link>
+      <pubDate>Sat, 29 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-8/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="网际控制报文协议icmp">网际控制报文协议ICMP</h1>
+<p>为了更有效地转发lP数据报和提高交付成功的机会，在网际层使用了网际控制报文协议ICMP(Internet Control Message Protocol)。</p>
+<p>主机或路由器使用ICMP来发送差错<strong>报告报文</strong>和<strong>询问报文</strong>。</p>
+<p><strong>ICMP报文被封装在IP数据报</strong>中发送。</p>
+<p>ICMP差错报告报文共有以下五种:</p>
+<ol>
+<li>
+<p>终点不可达</p>
+</li>
+<li>
+<p>源点抑制</p>
+</li>
+<li>
+<p>时间超过</p>
+</li>
+<li>
+<p>参数问题</p>
+</li>
+<li>
+<p>改变路由(重定向)</p>
+</li>
+</ol>
+<p>1.终点不可达</p>
+<p>当路由器或主机不能交付数据报时，就向源点发送终点不可达报文。</p>
+<p>具体可再根据ICMP的代码字段细分为目的网络不可达目的主机不可达、目的协议不可达、目的端口不可达、目的网络未知、目的主机未知等13种错误。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-8/4-8-2.png" alt=""  />
+</p>
+<p>2.源点抑制</p>
+<p>当路由器或主机由于拥塞而丢弃数据报时，就向源点发送源点抑制报文，使源点知道应当把数据报的发送速率放慢。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-8/4-8-3.png" alt=""  />
+</p>
+<p>3.时间超过</p>
+<p>当路由器收到一个目的IP地址不是自己的IP数据报，会将其生存时间TTL字段的值减1。
+若结果不为0，则将该IP数据报转发出去;若结果为O，除丢弃该IP数据报外，还要向源点发送时间超过报文。
+另外，当终点在预先规定的时间内不能收到一个数据报的全部数据报片时，就把已收到的数据报片都丢弃，也会向源点发送时间超过报文。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-8/4-8-4.png" alt=""  />
+</p>
+<p>4.参数问题</p>
+<p>当路由器或目的主机收到IP数据报后，根据其首部中的检验和字段发现首部在传输过程中出现了误码就丢弃该数据报，并向源点发送参数问题报文。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-8/4-8-5.png" alt=""  />
+</p>
+<p>5.改变路由（重定向）</p>
+<p>路由器把改变路由报文发送给主机，让主机知道下次应将数据报发送给另外的路由器（可通过更好的路由)。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-8/4-8-6.png" alt=""  />
+</p>
+<p>以下情况不应发送ICMP差错报告报文:</p>
+<ul>
+<li>
+<p>对ICMP差错报告报文不再发送ICMP差错报告报文</p>
+</li>
+<li>
+<p>对第一个分片的数据报片的所有后续数据报片都不发送ICMP差错报告报文</p>
+</li>
+<li>
+<p>对具有多播地址的数报都不发送ICMP差错报告报文</p>
+</li>
+<li>
+<p>对具有特殊地址(如127.0.0.0或0.0.0.0)的数据报不发送ICMP差错报告报文</p>
+</li>
+</ul>
+<p>常用的ICMP询问报文有以下两种:</p>
+<ul>
+<li>
+<p><strong>回送请求和回答</strong>    ICMP回送请求报文是由主机或路由器向一个特定的目的主机发出的询问。收到此报文的主机必须给源主机或路由器发送ICMP回送回答报文。这种询问报文用来<strong>测试目的站是否可达</strong>及了解其有关状态。</p>
+</li>
+<li>
+<p><strong>时间戳请求和回答</strong>     ICMP时间戳请求报文是请某个主机或路由器回答当前的日期和时间。在ICMP时间戳回答报文中有一个32位的字段，其中写入的整数代表从1900年1月1日起到当前时刻一共有多少秒。这种询问报文用来<strong>进行时钟同步和测量时间</strong>。</p>
+</li>
+</ul>
+<p>ICMP应用举例</p>
+<p>1.分组网间探测PING(Packet InterNet Groper)</p>
+<ul>
+<li>
+<p>用来测试主机或路由器间的连通性</p>
+</li>
+<li>
+<p>应用层直接使用网际层的ICMP(没有通过运输层的TCP或UDP)</p>
+</li>
+<li>
+<p>使用ICMP回送请求和回答报文</p>
+</li>
+</ul>
+<blockquote>
+<p>就是ping</p>
+</blockquote>
+<p>2.跟踪路由traceroute</p>
+<ul>
+<li>
+<p>用来测试IP数据报从源主机到达目的主机要经过哪些路由器</p>
+</li>
+<li>
+<p>Windows版本    tracert命令    应用层直接使用网际层ICMP    使用了ICMP回送请求和回答报文以及差错报告报文</p>
+</li>
+<li>
+<p>Unix版本    traceroute命令    在运输层使用UDP协议    仅使用ICMP差错报告报文</p>
+</li>
+</ul>
+<p>跟踪路由traceroute原理</p>
+<p>主机依次发送TTL=1、2、3、4&hellip;的回送请求报文（1个1个发，当接收到ICMP差错报告后再发下一个）</p>
+<p>经过路由依次丢弃IP数据报并给源主机发送ICMP差错报告（时间超过)</p>
+<p>当到达目的主机时，目的主机向源主机发送ICMP回送请求的回答报文，源主机就知道到达终点，停止发送回送请求报文。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-7</title>
+      <link>https://blog.0pt.im/learn/1-4-7/</link>
+      <pubDate>Fri, 28 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-7/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="ipv4数据报的首部格式">IPv4数据报的首部格式</h1>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-1.png" alt=""  />
+</p>
+<p>首部长度</p>
+<p>占4比特，表示IP数据报首部的长度。该字段的取值以4字节为单位。</p>
+<p>最小十进制取值为5，表示IP数据报首部只有20字节固定部分;</p>
+<p>最大十进制取值为15，表示IP数据报首部包含20字节固定部分和最大40字节可变部分;
+可选字段</p>
+<ul>
+<li>
+<p>长度从1个字节到40个字节不等。用来支持排错、测量及安全等措施。</p>
+</li>
+<li>
+<p>可选字段增加了IP数据报的功能，但这同时也使得IP数据报的首部长度成为可变的。这就增加了每一个路由器处理IP数据报的开销。实际上可选字段很少被使用。</p>
+</li>
+</ul>
+<p>填充字段</p>
+<ul>
+<li>确保首部长度为4字节的整数倍。使用全0进行填充。</li>
+</ul>
+<p>区分服务</p>
+<ul>
+<li>
+<p>占8比特，用来获得更好的服务。</p>
+</li>
+<li>
+<p>该字段在旧标准中叫作服务类型，但实际上一直没有被使用过。1998年，因特网工程任务组IETF把这个字段改名为区分服务。利用该字段的不同数值可提供不同等级的服务质量。</p>
+</li>
+<li>
+<p>只有在使用区分服务时，该字段才起作用。一般情况下都不使用该字段。</p>
+</li>
+</ul>
+<p>总长度</p>
+<ul>
+<li>
+<p>占16比特，表示IP数据报的总长度（首部+数据载荷)。</p>
+</li>
+<li>
+<p>最大取值为十进制的65535，以字节为单位。</p>
+</li>
+</ul>
+<p>举例：（）为二进制   首部长度=(0101) x 4 = 5 x 4 = 20(字节)</p>
+<p>总长度=(0000001111111100) = 1020(字节)</p>
+<p>数据载荷长度=总长度-首部长度=1020 - 20 = 1000(字节)</p>
+<p>标识</p>
+<ul>
+<li>
+<p>占16比特，属于同一个数据报的各分片数据报应该具有相同的标识。</p>
+</li>
+<li>
+<p>IP软件维持一个计数器，每产生一个数据报，计数器值加1，并将此值赋给标识字段。</p>
+</li>
+</ul>
+<p>标志</p>
+<p>占3比特，各比特含义如下:</p>
+<ul>
+<li>
+<p>DF位:1表示不允许分片;0表示允许分片</p>
+</li>
+<li>
+<p>MF位:1表示“后面还有分片”;0表示“这是最后一个分片”</p>
+</li>
+<li>
+<p>保留位:必须为0</p>
+</li>
+</ul>
+<p>片偏移</p>
+<ul>
+<li>
+<p>占13比特，指出分片数据报的数据载荷部分偏移其在原数据报的位置有多少个单位。</p>
+</li>
+<li>
+<p>片偏移以8个字节为单位。</p>
+</li>
+</ul>
+<p>举例：对IPv4数据报进行分片</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-2.png" alt=""  />
+</p>
+<blockquote>
+<p>片偏移除8是因为片偏移是以字节做单位。</p>
+</blockquote>
+<p>生存时间TTL</p>
+<ul>
+<li>
+<p>占8比特，最初以秒为单位，最大生存周期为255秒;路由器转发IP数据报时，将IP数据报首部中的该字段的值减去IP数据报在本路由器上所耗费的时间，若不为0就转发，否则就丢弃。</p>
+</li>
+<li>
+<p>现在以“跳数”为单位，路由器转发IP数据报时，将IP数据报首部中的该字段的值减1，若不为0就转发，否则就丢弃。</p>
+</li>
+<li>
+<p>防止IP数据报在网络中永久兜圈。（前面有提到）</p>
+</li>
+</ul>
+<p>协议</p>
+<ul>
+<li>占8比特，指明IPv4数据报的数据部分是何种协议数据单元。常用的一些协议和相应的协议字段值如下。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>协议名称</th>
+<th>ICMP</th>
+<th>IGMP</th>
+<th>TCP</th>
+<th>UDP</th>
+<th>lPv6</th>
+<th>OSPF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>协议字段值</strong></td>
+<td>1</td>
+<td>2</td>
+<td>6</td>
+<td>17</td>
+<td>41</td>
+<td>89</td>
+</tr>
+</tbody>
+</table>
+<p>首部检验和</p>
+<ul>
+<li>
+<p>占16比特，用来检测首部在传输过程中是否出现差错。比CRC检验码简单，称为因特网检验和.</p>
+</li>
+<li>
+<p>IP数据报每经过一个路由器，路由器都要重新计算首部检验和，因为某些字段（生存时间、标志、片偏移等)的取值可能发生变化。</p>
+</li>
+<li>
+<p>由于IP层本身并不提供可靠传输的服务，并且计算首部校验和是一项耗时的操作，因此在IPv6中,路由器不再计算首部校验和，从而更快转发IP数据报。</p>
+</li>
+</ul>
+<p>源lP地址和目的IP地址</p>
+<ul>
+<li>各占32比特，用来填写发送该IP数据报的源主机的IP地址和接收该IP数据报的目的主机的IP地址。</li>
+</ul>
+<p>例题：某公司网络下图所示。IP地址空间192.168.1.0/24被均分给销售部和技术部两个子网，并已分别为部分主机和路由器接口分配了IP地址，销售部子网的MTU=1500B，技术部子网的MTU=800 B.</p>
+<p>(2）假设主机192.168.1.1向主机192.168.1.208发送一个总长度为150OB的IP分组，IP分组的头部长度为20B，路由器在通过接口F1转发该IP分组时进行了分片。若分片时尽可能分为最大片，则一个最大IP分片封装数据的字节数是多少?至少需要分为几个分片?每个分片的片偏移量是多少?</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-3.png" alt=""  />
+</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-4.png" alt=""  />
+</p>
+<p><strong>这么分是错的</strong>，因为片偏移量必须为整数。</p>
+<p>应该取小于780且能被8整除的数，为776。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-5.png" alt=""  />
+</p>
+<p>例题：题47-a图是网络拓扑，题47-b图是主机进行Web请求的1个以太网数据帧前80个字节的十六进制及ASCII码内容。(1) Web服务器的IP地址是什么?该主机的默认网关的MAC地址是什么?
+(4)该帧所封装的IP分组经过路由器R转发时，需修改IP分组头中的哪些字段。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-6.png" alt=""  />
+</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-7/4-7-7.png" alt=""  />
+</p>
+<p>同理，该主机的默认网关的MAC地址是前6给字节，也就是00-21-27-21-51-ee</p>
+<p>IP分组经过路由器R时,生存时间字段被减1;</p>
+<p>首部检验和会被重新计算;</p>
+<p>若IP分组总长度大于MTU，则需要进行分片,此时总长度字段、标志字段片偏移字段都需要修改。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-6</title>
+      <link>https://blog.0pt.im/learn/1-4-6/</link>
+      <pubDate>Thu, 27 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-6/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="路由选择协议概述">路由选择协议概述</h1>
+<p>静态路由选择</p>
+<ul>
+<li>
+<p>由<strong>人工配置</strong>的网络路由、默认路由、特定主机路由、黑洞路由等都属于静态路由。</p>
+</li>
+<li>
+<p>这种人工配置方式简单、开销小。</p>
+</li>
+<li>
+<p>但不能及时适应网络状态(流量、拓扑等)的变化。</p>
+</li>
+<li>
+<p>一般只在小规模网络中采用。</p>
+</li>
+</ul>
+<p>动态路由选择</p>
+<ul>
+<li>
+<p>路由器通过路由选择协议<strong>自动获取路由信息</strong>。</p>
+</li>
+<li>
+<p>比较复杂、开销比较大。</p>
+</li>
+<li>
+<p><strong>能较好地适应网络状态的变化</strong>。</p>
+</li>
+<li>
+<p>适用于<strong>大规模网络</strong>。</p>
+</li>
+</ul>
+<p>因特网所采用的路由选择协议的主要特点</p>
+<ul>
+<li>
+<p>自适应：动态路由选择，能较好地适应网络状态的变化</p>
+</li>
+<li>
+<p>分布式：路由器之间交换路由信息</p>
+</li>
+<li>
+<p>分层次：将整个因特网划分为许多较小的自治系统AS(Autonomous System)</p>
+</li>
+</ul>
+<p>因特网采用<strong>分层次</strong>的路由选择协议</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-1.png" alt=""  />
+</p>
+<p>域间路由选择采用外部网关协议EGP</p>
+<p>域内路由选择采用内部网关协议IGP</p>
+<blockquote>
+<p>只是路由选择协议的分类名称，不是具体的路由选择协议。网关一词是因为在早期</p>
+</blockquote>
+<p>常见的路由选择协议</p>
+<p>路由选择协议</p>
+<p>内部网关协议IGP</p>
+<ul>
+<li>
+<p>路由信息协议RIP    基于距离向量，RIP在因特网上最早使用</p>
+</li>
+<li>
+<p>内部网关路由协议IGRP    基于距离向量，是思科早期私有的协议，现在已被EIGRP取代</p>
+</li>
+<li>
+<p>增强型内部网关路由协议EIGRP    思科私有的，用来取代IGRP的混合型路由协议(结合距离向量和链路状态)</p>
+</li>
+<li>
+<p>开放式最短路径优先OSPF    基于链路状态，在各种网络中广泛使用</p>
+</li>
+<li>
+<p>中间系统到中间系统IS-IS    基于链路状态，是ISP骨干网上最长常用的IGP协议</p>
+</li>
+</ul>
+<p>外部网关协议EGP</p>
+<ul>
+<li>边界网关协议BGP</li>
+</ul>
+<p>路由器的基本结构</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-2.png" alt=""  />
+</p>
+<p>路由表一般仅包含从目的网络到下一跳的映射</p>
+<p>路由表需要对网络拓扑变化的计算最优化</p>
+<p>转发表是从路由表得出的
+转发表的结构应当使查找过程最优化</p>
+<blockquote>
+<p>为方便理解，不严格区分路由表和转发表。</p>
+</blockquote>
+<h3 id="路由信息协议rip的基本工作原理">路由信息协议RIP的基本工作原理</h3>
+<p><strong>路由信息协议RIP</strong>(Routing Information Protocol)是内部网关协议IGP中最先得到广泛使用的协议之一，其相关标准文档为RFC 1058。</p>
+<p>RIP要求自治系统AS内的每一个路由器都要维护从它自己到AS内其他每一个网络的距离记录。这是一组距离，称为“<strong>距离向量D-V(Distance-Vector)</strong>”。</p>
+<p>RIP使用<strong>跳数</strong>(Hop Count)作为度量(Metric)<strong>来衡量到达目的网络的距离</strong>。</p>
+<ul>
+<li>
+<p>路由器到直连网络的距离定义为1。</p>
+</li>
+<li>
+<p>路由器到非直连网络的距离定义为所经过的路由器数加1。</p>
+</li>
+<li>
+<p>允许一条路径最多只能包含15个路由器。<strong>“距离”等于16时相当于不可达</strong>。因此，<strong>RIP只适用于小型互联网</strong>。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-3.png" alt=""  />
+</p>
+<p>RIP认为<strong>好的路由</strong>就是“距离短”的路由，也就是所<strong>通过路由器数量最少的路由</strong>。当到达同一目的网络有多条“距离相等”的路由时，可以进行<strong>等价负载均衡</strong>。</p>
+<p>RIP包含以下三个要点:</p>
+<ul>
+<li>
+<p><strong>和谁交换信息</strong>    仅和<strong>相邻路由器</strong>交换信息</p>
+</li>
+<li>
+<p><strong>交换什么信息</strong>    自己的路由表</p>
+</li>
+<li>
+<p><strong>何时交换信息</strong>    <strong>周期性交换</strong>（例如每30秒)</p>
+</li>
+</ul>
+<p>RIP基本工作过程</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-4.png" alt=""  />
+</p>
+<p>路由器刚开始工作时，<strong>只知道自己到直连网络的距离为1</strong>。</p>
+<p>每个路由器仅<strong>和相邻路由器周期性地交换并更新路由信息</strong>。</p>
+<p>若干次交换和更新后，<strong>每个路由器都知道到达本AS内各网络的最短距离和下一跳地址</strong>，称为收敛。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-5.png" alt=""  />
+</p>
+<p>RIP的路由条目的更新规则</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-6.png" alt=""  />
+</p>
+<p>C将其路由表发给D，结果D改造，对D原有路由表进行更新。</p>
+<p>例题：某自治系统内采用RIP协议，若该自治系统内的路由器R1收到其邻居路由器R2的距离矢量，距离矢量中包含信息&lt; net1,16 &gt;，则能得出的结论是</p>
+<p>A.R2可以经过R1到达net1，跳数为17    B.R2可以到达net1，跳数为16</p>
+<p>C.R1可以经过R2到达net1，跳数为17    D.R1不能经过R2到达net1</p>
+<p>解析：在RIP协议中，距离16表明目的网络不可达。因此，R2无法到达net1，R1也无法通过R2到达net1。选D</p>
+<p>RIP存在“<strong>坏消息传播得慢</strong>”的问题</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-7.png" alt=""  />
+</p>
+<p>R1与N1连接出现故障。将N1改成16跳，并发送路由信息给R2，而此时R2也发路由信息给R1.若R2发送的路由信息先到，R1更新路由表N1为3跳，发送回R2，R2收到后，更新自身路由表N1为4跳，再发回R1&hellip;&hellip;直到R1R2路由表关于N1的均为16跳才停止，这叫做收敛。</p>
+<p>“坏消息传播得慢”又称为<strong>路由环路</strong>或<strong>距离无穷计数</strong>问题，这是<strong>距离向量算法的一个固有问题</strong>。可以采取多种措施<strong>减少</strong>出现该问题的概率或减小该问题带来的危害。</p>
+<ul>
+<li>
+<p><strong>限制最大路径距离</strong>为15（16表示不可达)</p>
+</li>
+<li>
+<p>当路由表发生变化时就立即发送更新报文（即“<strong>触发更新</strong>”)，而不仅是周期性发送</p>
+</li>
+<li>
+<p>让路由器记录收到某特定路由信息的接口，而不让同一路由信息再通过此接口向反方向传送（即“<strong>水平分割</strong>”）</p>
+</li>
+</ul>
+<p>例题：假设R1、R2、R3采用RIP协议交换路由信息，且均已收敛。若R3检测到网络201.1.2.0/25不可达，并向R2通告一次新的距离向量，则R2更新后，其到达该网络的距离是</p>
+<p>A.2    B.3    C.16    D.17</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-8.png" alt=""  />
+</p>
+<p>解析：</p>
+<p>由题知，R3与201.1.2.0/25连接之间出现故障，R3将其改为201.1.2.0/25为16跳，并向R2通告一次新的距离向量。则R2也将201.1.2.0/25改为为16跳。</p>
+<p>由知，R2更新后，则是R1给R2发送了RIP更新报文，R2又将201.1.2.0/25改为3跳。</p>
+<p>选B</p>
+<h3 id="开放最短路径优先ospf的基本工作原理">开放最短路径优先OSPF的基本工作原理</h3>
+<p>开放最短路径优先OSPF(Open Shortest Path First)，是为克服RIP的缺点在1989年开发出来</p>
+<ul>
+<li>
+<p>“开放”表明OSPF协议不是受某一家厂商控制，而是<strong>公开发表</strong>的。</p>
+</li>
+<li>
+<p>“最短路径优先”是因为使用了Dijkstra提出的<strong>最短路径算法</strong>SPF。</p>
+</li>
+</ul>
+<p>OSPF是<strong>基于链路状态</strong>的，而不像RIP那样是基于距离向量的。</p>
+<p>OSPF采用SPF算法计算路由，从算法上保证了<strong>不会产生路由环路</strong>。</p>
+<p>OSPF<strong>不限制网络规模</strong>，更新效率高，<strong>收敛速度快</strong>。</p>
+<p>链路状态是指本路由器都<strong>和哪些路由器相邻</strong>，以及相应<strong>链路的“代价”</strong>(cost)。</p>
+<ul>
+<li>“代价”用来表示费用、距离、时延、带宽，等等。这些都由网络管理人员来决定。</li>
+</ul>
+<p>举例：思科路由器中OSPF计算代价的方法: 100Mbps/链路带宽</p>
+<p>计算结果小于1的值仍记为1;大于1且有小数的，舍去小数。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-10.png" alt=""  />
+</p>
+<p>OSPF相邻路由器之间通过交互<strong>问候(Hello)分组</strong>，建立和维护<strong>邻居关系</strong>。</p>
+<ul>
+<li>
+<p>Hello分组封装在lP数据报中，发往组播地址224.0.0.5;</p>
+</li>
+<li>
+<p>发送周期为10秒</p>
+</li>
+<li>
+<p>40秒未收到来自邻居路由器的Hello分组，则认为该邻居路由器不可达。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-11.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-12.png" alt=""  />
+</p>
+<p>使用OSPF的每个路由器都会产生<strong>链路状态通告</strong>LSA(Link State Advertisement)。LSA中包含以下内容:</p>
+<ul>
+<li>
+<p>直连网络的链路状态信息</p>
+</li>
+<li>
+<p>邻居路由器的链路状态信息</p>
+</li>
+</ul>
+<p>LSA被封装在<strong>链路状态更新分组LSU</strong>中，采用<strong>洪泛法</strong>发送。</p>
+<p>使用OSPF的每个路由器都有一个<strong>链路状态数据库LSDB</strong>，用于存储LSA。</p>
+<p>通过各路由器洪泛发送封装有自己LSA的LSU分组，各路由器的LSDB最终将达到一致。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-13.png" alt=""  />
+</p>
+<p>使用OSPF的各路由器<strong>基于LSDB进行最短路径优先SPF计算</strong>，构建出各自到达其他各路由器的最短路径，即构建各自的路由表。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-14.png" alt=""  />
+</p>
+<p>OSPF有以下五种分组类型</p>
+<ul>
+<li>
+<p>类型1，<strong>问候</strong>(Hello)分组    用来发现和维护邻居路由器的可达性。</p>
+</li>
+<li>
+<p>类型2，<strong>数据库描述</strong>(Database Description)分组    向邻居路由器给出自己的链路状态数据库中的所有链路状态项目的摘要信息</p>
+</li>
+<li>
+<p>类型3，<strong>链路状态请求</strong>(Link State Request)分组    向邻居路由器请求发送某些链路状态项目的详细信息。</p>
+</li>
+<li>
+<p>类型4，<strong>链路状态更新</strong>(Link State Update)分组    路由器使用这种分组将其链路状态进行洪泛发送，即用洪泛法对全网更新链路状态。</p>
+</li>
+<li>
+<p>类型5，<strong>链路状态确</strong>认(Link State Acknowledgment)分组    这是对链路状态更新分组的确认分组。</p>
+</li>
+</ul>
+<p>OSPF的基本工作过程</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-15.png" alt=""  />
+</p>
+<p>OSPF在多点接入网络中路由器邻居关系的建立</p>
+<ul>
+<li>
+<p>选举指定路由器DR(designated router)和备用的指定路由器BDR(backup designated router)</p>
+</li>
+<li>
+<p>所有的非DR/BDR只与DR/BDR建立邻居关系</p>
+</li>
+<li>
+<p>非DR/BDR之间通过DR/BDR交换信息</p>
+</li>
+<li>
+<p>DR出了故障就用BDR</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-16.png" alt=""  />
+</p>
+<p>为了使OSPF能够用于规模很大的网络，OSPF把一个自治系统再划分为若干个更小的范围，叫做<strong>区域</strong>(Area)</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-17.png" alt=""  />
+</p>
+<p>区域内路由器IR(internal router): R1,R2,R8,49</p>
+<p>区域边界路由器ABR(area border router): R3,R4,R7</p>
+<p>主干路由器BBR(backbone router): R3,R4,R5,R6,R7</p>
+<p>自治系统边界路由器ASBR(AS border router): R6</p>
+<h3 id="边界网关协议bgp的基本工作原理">边界网关协议BGP的基本工作原理</h3>
+<p>因特网采用分层次的路由选择协议</p>
+<p>内部网关协议IGP（例如路由信息协议RIP或开放最短路径优先OSPF）</p>
+<ul>
+<li>
+<p>设法使分组在一个自治系统内尽可能有效地从源网络传输到目的网络</p>
+</li>
+<li>
+<p>无需考虑自治系统外部其他方面的策略</p>
+</li>
+</ul>
+<p>外部网关协议EGP（例如边界网关协议BGP）</p>
+<ul>
+<li>在不同自治系统内，度量路由的“代价”(距离，带宽，费用等）可能不同。因此，对于自治系统之间的路由选择，使用“代价”作为度量来寻找最佳路由是不行的。</li>
+</ul>
+<p>外部网关协议EGP（例如边界网关协议BGP）</p>
+<ul>
+<li>
+<p>在不同自治系统内，度量路由的“代价”(距离，带宽，费用等）可能不同。因此，对于自治系统之间的路由选择，使用“代价”作为度量来寻找最佳路由是不行的。</p>
+</li>
+<li>
+<p>自治系统之间的路由选择必须考虑相关策略(政治，经济，安全等)</p>
+</li>
+<li>
+<p>BGP只能是力求寻找一条能够到达目的网络且比较好的路由（不能兜圈子)，而并非要寻找一条最佳路由</p>
+</li>
+</ul>
+<p>在配置BGP时，每个自治系统的管理员要选择至少一个路由器作为该自治系统的“<strong>BGP发言人</strong>&ldquo;不同自治系统的BGP发言人要交换路由信息，首先必须建立<strong>TCP连接</strong>，端口号为179</p>
+<ul>
+<li>
+<p>在此TCP连接上交换BGP报文以建立<strong>BGP会话</strong></p>
+</li>
+<li>
+<p>利用BGP会话<strong>交换路由信息</strong>（例如，增加新的路由，或撤销过时的路由，以及报告出错的情况等)</p>
+</li>
+<li>
+<p>使用TCP连接交换路由信息的两个BGP发言人，彼此称为对方的<strong>邻站(<strong>neighbor)或</strong>对等站</strong>(peer)BGP发言人除了运行BGP外，还必须运行自己所在自治系统所使用的内部网关协议IGP，例如OSPF或RIlP。</p>
+</li>
+</ul>
+<p>BGP发言人<strong>交换网络可达性的信息</strong>（要到达某个网络所要经过的一系列自治系统)</p>
+<p>当BGP发言人互相交换了网络可达性的信息后，各BGP发言人就<strong>根据</strong>所采用的<strong>策略</strong>从收到的路由信息中<strong>找出到达各自治系统的较好的路由</strong>。也就是构造出树形结构、<strong>不存在回路的自治系统连通图</strong>。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-18.png" alt=""  />
+</p>
+<p>BGP适用于多级结构的因特网</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-19.png" alt=""  />
+</p>
+<p>BGP-4有以下四种报文</p>
+<ul>
+<li>
+<p>OPEN（打开）报文:用来与相邻的另一个BGP发言人建立关系，使通信初始化。</p>
+</li>
+<li>
+<p>UPDATE（更新）报文:用来通告某一路由的信息，以及列出要撤销的多条路由。</p>
+</li>
+<li>
+<p>KEEPALIVE（保活）报文:用来周期性地证实邻站的连通性。</p>
+</li>
+<li>
+<p>NOTIFICATION（通知）报文:用来发送检测到的差错。</p>
+</li>
+</ul>
+<p>例题：R1与R2之间利用哪个路由协议交换路由信息?该路由协议的报文被封装到哪个协议的分组中进行传输?</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-20.png" alt=""  />
+</p>
+<p>解析：</p>
+<p>R1和R2分别位于两个不同的自治系统AS1和AS2中;</p>
+<p>自治系统之间需要使用外部网关协议EGP这一类协议，具体为<strong>边界网关协议BGP</strong>，目前使用最多的版本是BGP-4;</p>
+<p>BGP-4报文被封装在<strong>TCP报文段</strong>中进行传输。</p>
+<p>例题：直接封装RIP、OSPF、BGP报文的协议分别是</p>
+<p>A.TCP、UDP、IP    B.TCP、IP、UDP    C.UDP、TCP、IP    D.UDP、IP、TCP</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-6/4-6-21.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-5</title>
+      <link>https://blog.0pt.im/learn/1-4-5/</link>
+      <pubDate>Wed, 26 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-5/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="静态路由配置及其可能产生的路由环路问题">静态路由配置及其可能产生的路由环路问题</h1>
+<p>静态路由配置是指用户或网络管理员使用路由器的相关命令给路由器<strong>人工配置路由表</strong>。</p>
+<ul>
+<li>
+<p>这种人工配置方式简单、开销小。但<strong>不能及时适应网络状态(流量、拓扑等)的变化</strong>。</p>
+</li>
+<li>
+<p>一般只在小规模网络中采用。</p>
+</li>
+</ul>
+<p>使用静态路由配置可能出现以下<strong>导致</strong>产生<strong>路由环路</strong>的错误</p>
+<ul>
+<li>
+<p>配置错误</p>
+</li>
+<li>
+<p>聚合了不存在的网络</p>
+</li>
+<li>
+<p>网络故障</p>
+</li>
+</ul>
+<p>假设R1要转发给192.168.2.0/24，应该转发给R2的接口0。但是R1路由表除了直连自动识别外，没有R2接口0，换句话说，R1不知道目的网络的存在。</p>
+<p>因此，我们可以使用路由器的相关配置命令，给R1添加一条到达该目的网络的路由条目。</p>
+<p>该路由条目是是我们人工设置的静态路由。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-1.png" alt=""  />
+</p>
+<p>默认路由为0.0.0.0/0，对于本例，下一跳为R2的接口0</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-2.png" alt=""  />
+</p>
+<p>人工配置默认路由，减少人工配置工作量，可以删了上一个静态路由。</p>
+<p>特定主机路由</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-3.png" alt=""  />
+</p>
+<p>静态路由配置错误导致路由环路</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-4.png" alt=""  />
+</p>
+<p>R2要转发IP数据报给192.168.1.0/24，但是把静态路由配错了如图所示。如何会发给R3，R3检查路由表，把该数据报发给R2,R2检查路由表，又发给R3，形成<strong>路由环路</strong>。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-5.png" alt=""  />
+</p>
+<p>为了<strong>防止IP数据报在路由环路中永久兜圈</strong>，在IP数据报首部设有<strong>生存时间TTL</strong>字段。</p>
+<p>IP数据报进入路由器后，TTL字段的值减1。若TTL的值不等于0，则被路由器转发，否则被丢弃。</p>
+<p>聚合了不存在的网络而导致的路由环路</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-6.png" alt=""  />
+</p>
+<p>先把黑洞路由当作不存在。R2要转发给192.168.2.0/24，检查路由表，发现192.168.0.0/22的聚合路由，于是发送给R1，R1检查路由表，匹配192.168.2.0/24，于是发送给192.168.2.0/24。</p>
+<p>但是，聚合路由192.168.0.0/22包含4个IP，其中2个还不存在，试想，当R2要转发给一个不存在的IP192.168.0.0/24，检查路由表，发现192.168.0.0/22的聚合路由，于是发送给R1，R1检查路由表，只能匹配默认路由，于是发回给R2，然后就形成路由环路。</p>
+<p>所以，我们可以在路由表中，添加所聚合的、不存在的黑洞路由。此时R2要转发给一个不存在的IP192.168.0.0/24，检查路由表，发现192.168.0.0/22的聚合路由与192.168.0.0/24的黑洞路由，根据最长前缀匹配，选择到黑洞路由，之后，该数据报被丢弃，相当于进入黑洞，有去无回。</p>
+<p>网络故障导致的路由环路</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-5/4-5-7.png" alt=""  />
+</p>
+<p>当图示网络故障，路由表会自动删除所直连的路由记录。此时R1要发送给192.168.1.0/24，检查路由表，发现192.168.0.0/22的聚合路由，于是发送给R1，R1检查路由表，只能匹配默认路由，于是发回给R2，然后就形成路由环路。</p>
+<p>所以，我们同样也可以添加黑洞路由。可以设置黑洞路由在故障发送后路由记录被删除后自动生效。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-4</title>
+      <link>https://blog.0pt.im/learn/1-4-4/</link>
+      <pubDate>Tue, 25 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-4/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="数据报的发送和转发过程">数据报的发送和转发过程</h1>
+<p>IP数据报的发送和转发过程包含以下两部分:</p>
+<ul>
+<li>
+<p>主机发送IP数据报</p>
+</li>
+<li>
+<p>路由器转发IP数据报</p>
+</li>
+</ul>
+<p>为了将重点放在TCP/IP协议栈的网际层发送和转发IP数据报的过程上，在之后的举例中，我们<strong>忽略使用ARP协议来获取目的主机或路由器接口的MAC地址的过程以及以太网交换机自学习和转发帧的过程</strong>。</p>
+<p>举例：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-4/4-4-1.png" alt=""  />
+</p>
+<p>假设C要发送数据给F，源主机如何知道目的主机是否与自己在同一个网络中？通过想与运算。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-4/4-4-2.png" alt=""  />
+</p>
+<p>C怎么知道R的存在？</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-4/4-4-3.png" alt=""  />
+</p>
+<p>指定默认网关。</p>
+<p>假设A发送数据给D</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-4/4-4-4.png" alt=""  />
+</p>
+<p>路由器是如何转发呢？</p>
+<ul>
+<li>
+<p>检查lP数据报首部是否出错:若出错，则直接丢弃该lIP数据报并通告源主机若没有出错，则进行转发</p>
+</li>
+<li>
+<p>根据lP数据报的目的地址在路由表中查找匹配的条目:若找到匹配的条目，则转发给条目中指示的下一跳若找不到，则丢弃该lP数据报并通告源主机</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-4/4-4-5.png" alt=""  />
+</p>
+<p>将目的地址与目的网络相应的地址掩码进行相与，得到的结果为目的网络，即匹配。</p>
+<blockquote>
+<p>路由器隔离广播域，就算广播数据报的目的地址为其他网络，也不转发。</p>
+</blockquote>
+<p>例题：下列网络设备中，能够抑制广播风暴的是</p>
+<p>1中继器  2集线器  3网桥  4路由器</p>
+<p>A.仅1和2  B.仅3  C.仅3和4  D.仅4</p>
+<p>解析：</p>
+<p>中继器和集线器工作在物理层，既不隔离冲突域也不隔离广播域。</p>
+<p>网桥和交换机(多端口网桥）工作在数据链路层，可以隔离冲突域，不能隔离广播域。</p>
+<p>路由器工作在网络层，既隔离冲突域，也隔离广播域。</p>
+<p>选D</p>
+<p>例题：下列关于IP路由器概念的描述中，正确的是</p>
+<p>1运行路由协议，设置路由表</p>
+<p>2监测到拥塞时，合理丢弃IP分组</p>
+<p>3对收到的IP分组头进行差错校验，确保传输的IP分组不丢失</p>
+<p>4根据收到的IP分组的目的IP地址，将其转发到合适的输出线路上</p>
+<p>A.仅34    B.仅123    C.仅124    D.1234</p>
+<p>解析：</p>
+<p>IP路由器工作在TCP/IP体系结构的网际层(或称IP层)，TCP/IP体系结构的网际层并不负责可靠传输，也就是不能确保传输的IP分组不丢失。</p>
+<p>IP路由器对收到的lP分组头进行差错校验，当发现错误时会丢弃该IP分组并向源主机发送ICMP差错报告报文(类型为参数错误)。</p>
+<p>综上所述，题目中的描述ⅢI是错误的，利用排除法可知选项C正确。题目中的其他描述项都是正确的。</p>
+<p>例题：</p>
+<p>某网络拓扑如下图所示，其中路由器内网接口、DHCP服务器、WWW服务器与主机1均采用静态IP地址配置，相关地址信息见图中标注;主机2~主机N通过DHCP服务器动态获取IP地址等配置信息。</p>
+<p>若主机1的子网掩码和默认网关分别配置为255.255.255.0和111.123.15.2，则该主机是否能访问WWW服务器?是否能访问Internet?请说明理由。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-4/4-4-6.png" alt=""  />
+</p>
+<p>解析：主机1可以访问WWW服务器。从IP地址与子网掩码配置以及物理连接方面看，主机1和wwW服务器在同一网络中。</p>
+<p>主机1不能访问Internet，因为它的默认网关错误配置成了DHCP服务器的IP地址,DHCP服务器不具备路由器的功能,无法将IP分组转发到Internet。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-3</title>
+      <link>https://blog.0pt.im/learn/1-4-3/</link>
+      <pubDate>Mon, 24 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-3/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="ipv4地址概述">IPv4地址概述</h1>
+<p>在TCP/IP体系中，IP地址是一个最基本的概念，我们必须把它弄清楚。</p>
+<p>IPv4地址就是给因特网(Internet)上的<strong>每一台主机(或路由器）的每一个接口</strong>分配一个在全世界范围内是<strong>唯一的32比特的标识符</strong>。</p>
+<p>IP地址由因特网名字和数字分配机构ICANN(Internet Corporation for Assigned Names and Numbers)进行分配。</p>
+<ul>
+<li>
+<p>我国用户可向亚太网络信息中心APNIC(Asia Pacific Network Information Center)申请IP地址，需要缴费。</p>
+</li>
+<li>
+<p>2011年2月3日，互联网号码分配管理局IANA(由ICANN行使职能）宣布，IPv4地址已经分配完毕。</p>
+</li>
+<li>
+<p>我国在2014至2015年也逐步停止了向新用户和应用分配IPv4地址。同时全面开展商用部署</p>
+</li>
+</ul>
+<p><strong>IPv4地址的编址方法经历了如下三个历史阶段</strong>:</p>
+<ul>
+<li>
+<p>1981年  分类编址</p>
+</li>
+<li>
+<p>1985年  划分子网</p>
+</li>
+<li>
+<p>1993年  无分类编址</p>
+</li>
+</ul>
+<p>32比特的IPv4地址不方便阅读、记录以及输入等，因此IPv4地址采用点分十进制表示方法以方便用户使用。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-1.png" alt=""  />
+</p>
+<p>例题：请将以下这些32比特的IPv4地址转换为点分十进制形式。</p>
+<p>(1) 00001010 11111110 00001111 11110000</p>
+<p>(2)10101100 00010000 10111111 11110111</p>
+<p>(3)11000000 10101000 10100101 00000111</p>
+<p>答案：</p>
+<p>(1)10.254.15.240    (2)172.16.191.247    (3)192.168.165.7</p>
+<blockquote>
+<p>二进制与十进制的转换自己学，较简单</p>
+</blockquote>
+<h3 id="分类编址的ipv4地址">分类编址的IPv4地址</h3>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-2.png" alt=""  />
+</p>
+<p>注意事项:</p>
+<p>只有A类、B类和C类地址可分配给网络中的主机或路由器的各接口</p>
+<p>主机号为“全0”的地址是网络地址，不能分配给主机或路由器的各接口</p>
+<p>主机号为“全1”的地址是广播地址，不能分配给主机或路由器的各接口</p>
+<h3 id="a类地址">A类地址</h3>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-3.png" alt=""  />
+</p>
+<p>可指派的网络数量为2^(8-1) - 2 = 126(减2的原因是除去最小网络号0和最大网络号127)</p>
+<p>每个网络中可分配的IP地址数量为2^24 -2= 16777214(减2的原因是除去主机号为全0的网络地址和全1的广播地址)</p>
+<h3 id="b类地址">B类地址</h3>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-5.png" alt=""  />
+</p>
+<p>可指派的网络数量为2^(16-2) =16384</p>
+<p>每个网络中可分配的IP地址数量为2^16 - 2 = 65534(减2的原因是除去主机号为全0的网络地址和全1的广播地址)</p>
+<p>注意:有些教材中指出128.0是保留网络号，B类第一个可指派的网络号为128.1。但根据2002年9月发表的RFC3330文档，128.0网络号已经可以分配了。</p>
+<h3 id="c类地址">C类地址</h3>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-6.png" alt=""  />
+</p>
+<p>可指派的网络数量为2^(24-3) = 2097152</p>
+<p>每个网络中可分配的IP地址数量为2^8 - 2= 254 (减2的原因是除去主机号为全0的网络地址和全1的广播地址)</p>
+<p>注意:有些教材中指出192.0.0是保留网络号，C类第一个可指派的网络号为192.0.1。但根据2002年9月发表的RFC 3330文档，192.0.0网络号已经可以分配了。只不过目前还没有分配出去。</p>
+<p>例题：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-7.png" alt=""  />
+</p>
+<p>解析：</p>
+<p>1.根据地址左起第一个十进制数的值，可以判断出网络类别(小于127的为A类，128~191的为B类，192~223的为C类);</p>
+<p>2.根据网络类别，就可找出地址中的网络号部分和主机号部分(A类地址网络号为左起第一个字节，B类地址网络号为左起前两个字节,C类地址网络号为左起前三个字节);</p>
+<p>3.以下三种情况的地址不能指派给主机或路由器接口:</p>
+<ul>
+<li>
+<p>A类网络号0和127</p>
+</li>
+<li>
+<p>主机号为“全0”，这是网络地址</p>
+</li>
+<li>
+<p>主机号为“全1”，这是广播地址</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-8.png" alt=""  />
+</p>
+<p>例题：下列IP地址中，只能作为IP分组的源IP地址但不能作为目的IP地址的是</p>
+<p>A.0.0.0.0    B.127.0.0.1    C.20.10.10.3    D.255.255.255.25</p>
+<p>解析：</p>
+<p>地址0.0.0.0是一个特殊的IPv4地址，只能作为源地址使用，表示“在本网络上的本主机”。封装有DHCPDiscovery报文的IP分组的源地址使用0.0.0.0;</p>
+<p>以127开头且后面三个字节非“全O”或“全1”的IP地址是一类特殊的IPv4地址，既可以作为源地址使用，也可以作为目的地址使用，用于本地软件环回测试，例如常用的环回测试地址127.0.0.1;</p>
+<p>地址255.255.255.255是一个特殊的IPv4地址，只能作为目的地址使用，表示“只在本网络上进行广播(各路由器均不转发)”。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-9.png" alt=""  />
+</p>
+<p>例题：请根据本节课所学内容给出下图各网络的IPv4地址分配方案。请按照节约IP地址的原则进行分配。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-10.png" alt=""  />
+</p>
+<p>解析：</p>
+<p><strong>路由器接口也需要一个ip地址</strong></p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-11.png" alt=""  />
+</p>
+<h3 id="划分子网的的ipv4地址">划分子网的的IPv4地址</h3>
+<p>将原有的网络地址划分成若干个更细的子网，避免重复申请新的网络地址，从而节约网络地址。</p>
+<p>如某单位申请了一个b类地址145.16.0.0，将其分为3个子网，主机号为145.16向后借去子网号，如145.16.0，145.16.2，145.16.3</p>
+<p>10010001.00010000.00000000.00000000       (145.16.0.0)</p>
+<p>10010001.00010000.00000001.00000000       (145.16.1.0)</p>
+<p>10010001.00010000.00000010.00000000       (145.16.2.0)</p>
+<p>10010001.00010000.00000011.00000000       (145.16.3.0)</p>
+<p><strong>32比特的子网掩码可以表明分类IP地址的主机号部分被借用了几个比特作为子网号</strong></p>
+<ul>
+<li>
+<p>子网掩码使用<strong>连续的比特1来对应网络号和子网号</strong></p>
+</li>
+<li>
+<p>子网掩码使用<strong>连续的比特0来对应主机号</strong></p>
+</li>
+<li>
+<p>将划分子网的<strong>IPv4地址</strong>与其相应的<strong>子网掩码</strong>进行<strong>逻辑与运算</strong>就可得到IPv4地址<strong>所在子网的网络地址</strong></p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-12.png" alt=""  />
+</p>
+<p>例题：已知某个网络的地址为218.75.230.0，使用子网掩码255.255.255.128对其进行子网划分，请给出划分细节。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-13.png" alt=""  />
+</p>
+<p>对正常c类网进行分析</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-14.png" alt=""  />
+</p>
+<p>但是我们要分子网将主机号写成8个比特的二进制数</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-15.png" alt=""  />
+</p>
+<p>相当于分成2个子网。</p>
+<p>例题：已知某个网络的地址为218.75.230.0，使用子网掩码255.255.255.192对其进行子网划分，请给出划分细节。</p>
+<p>解析：</p>
+<p>1.根据所给网络地址可知其为C类网络地址，网络号占3个字节，主机号占1个字节;</p>
+<p>2.根据所给子网掩码可知从1字节主机号中借用2位作为子网号;</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-16.png" alt=""  />
+</p>
+<p>例题：某主机的IP地址为180.80.77.55，子网掩码为255.255.252.0，如该主机向其所在子网发送广播分组，则目的地址可以是</p>
+<p>A.180.80.76.0    B.180.80.76.255    C.180.80.77.255    D.180.80.79.255</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-18.png" alt=""  />
+</p>
+<p>默认的子网掩码是指在未划分子网的情况下使用的子网掩码。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-19.png" alt=""  />
+</p>
+<h3 id="无分类编址的ipv4地址">无分类编址的IPv4地址</h3>
+<p>划分子网在一定程度上缓解了因特网在发展中遇到的困难，但是<strong>数量巨大的C类网</strong>因为其<strong>地址空间太小</strong>并<strong>没有得到充分使用</strong>，而因特网的IP地址仍在加速消耗，整个<strong>IPv4地址空间面临全部耗尽的威胁</strong>。</p>
+<p>为此，因特网工程任务组IETF又提出了采用<strong>无分类编址</strong>的方法来解决IP地址紧张的问题同时还专门成立IPv6工作组负责研究新版本IP以彻底解决IP地址耗尽问题。</p>
+<p>1993年，IETF发布了<strong>无分类域间路由选择</strong>CIDR(Classless Inter-Domain Routing)的RFC文档:RFC 1517~1519和1520。</p>
+<ul>
+<li>
+<p><strong>CIDR消除了传统的A类、B类和C类地址，以及划分子网的概念</strong>;</p>
+</li>
+<li>
+<p><strong>CIDR可以更加有效地分配IPv4的地址空间</strong>，并且可以在新的IPv6使用之前允许因特网的规模继续增长。</p>
+</li>
+</ul>
+<p>CIDR使用“斜线记法”，或称CIDR记法。即在IPv4地址后面加上斜线“/”，在斜线后面写上网络前缀所占的比特数量。</p>
+<p>举例：128.14.35.7 / 20</p>
+<p>网络前缀占用的比特数量：20  主机编号占用的比特数量： 32-20=12</p>
+<p>CIDR实际上是<strong>将网络前缀都相同的连续的IP地址组成一个“CIDR地址块”</strong>。</p>
+<p>我们只要知道CIDR地址块中的任何一个地址，就可以知道该地址块的全部细节:</p>
+<ul>
+<li>
+<p>地址块的最小地址</p>
+</li>
+<li>
+<p>地址块的最大地址</p>
+</li>
+<li>
+<p>地址块中的地址数量</p>
+</li>
+<li>
+<p>地址块聚合某类网络(A类、B类或C类)的数量</p>
+</li>
+<li>
+<p>地址掩码（也可继续称为子网掩码）</p>
+</li>
+</ul>
+<p>例题：请给出CIDR地址块128.14.35.7/20的全部细节（最小地址，最大地址，地址数量，聚合C类网数量，地址掩码)。</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-20.png" alt=""  />
+</p>
+<p>例题：请给出CIDR地址块206.0.64.8/18的全部细节（最小地址，最大地址，地址数量，聚合C类网数量，地址掩码）。</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-21.png" alt=""  />
+</p>
+<p><strong>路由聚合</strong>(构造超网)</p>
+<p>举例：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-22.png" alt=""  />
+</p>
+<p><strong>网络前缀越长，地址块越小，路由越具体</strong>;</p>
+<p>若路由器查表转发分组时发现有多条路由可选，则选择网络前缀最长的那条，这称为<strong>最长前缀匹配</strong>,因为这样的路由更具体。</p>
+<p>例题：在子网192.168.4.0 / 30中，能接收目的地址为192.168.4.3的IP分组的最大主机数是</p>
+<p>A.0    B.1    C.2    D.4</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-23.png" alt=""  />
+</p>
+<p>选C</p>
+<p>例题：某路由表中有转发接口相同的4条路由表项，其目的网络地址分别为35.230.32.0/21、35.230.40.0/21、35.230.48.0/21和35.230.56.0/21，将该4条路由聚合后的目的网络地址为</p>
+<p>A.35.230.0.0/19    B.35.230.0.0/20    C.35.230.32.0/19    D.35.230.32.0/20</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-24.png" alt=""  />
+</p>
+<p>故选C</p>
+<h3 id="ipv4地址的应用规划">IPv4地址的应用规划</h3>
+<p>1.定长的子网掩码FLSM</p>
+<ul>
+<li>
+<p>使用同一个子网掩码来划分子网</p>
+</li>
+<li>
+<p>每个子网所分配的IP地址数量相同，造成IP地址的浪费</p>
+</li>
+</ul>
+<p>2.变长的子网掩码VLSM</p>
+<ul>
+<li>
+<p>使用不同的子网掩码来划分子网</p>
+</li>
+<li>
+<p>每个子网所分配的IP地址数量可以不同，尽可能减少对IP地址的浪费</p>
+</li>
+</ul>
+<p>FLSM举例</p>
+<p>假设申请到的C类网络为218.75.230.0，请使用定长的子网掩码给下图所示的小型互联网中的各设备分配IP地址。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-25.png" alt=""  />
+</p>
+<p>应用需求:将C类网络218.75.230.0划分成5个子网，每个子网上可分配的IP地址数量不得少于各自的需求。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-26.png" alt=""  />
+</p>
+<p>任选5个</p>
+<p>VLSM举例</p>
+<p>假设申请到的C类网络为218.75.230.0/24，请使用定长的子网掩码给下图所示的小型互联网中的各设备分配IP地址。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-3/4-3-27.png" alt=""  />
+</p>
+<p>应用需求:从地址块218.75.230.0/24中取出5个地址块</p>
+<p>(1个“/27”地址块，3个“/28”地址块，1个“/30&quot;(1个“/27”地址块，3个“/28”地址块，1个“/30&quot;地址块)，按需分配给上图所示的5个网络。</p>
+<p>在该地址块中给左图所示的网络N1~N5分配子块，分配原则是“<strong>每个子块的起点位置不能随意选取，只能选取块大小整数倍的地址作为起点</strong>”。建议先给大的子块分配。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-2</title>
+      <link>https://blog.0pt.im/learn/1-4-2/</link>
+      <pubDate>Sun, 23 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-2/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="网络层提供的两种服务">网络层提供的两种服务</h1>
+<h3 id="面向连接的虚电路服务">面向连接的虚电路服务</h3>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-2/4-2-1.png" alt=""  />
+</p>
+<p><strong>可靠通信由网络来保证</strong></p>
+<p>必须建立<strong>网络层的连接</strong>——<strong>虚电路VC</strong>(Virtual Circuit)</p>
+<p>通信双方<strong>沿着已建立的虚电路发送分组</strong></p>
+<p>目的主机的地址仅在连接建立阶段使用，之后每个<strong>分组的首部只需携带一条虚电路的编号</strong>(构成虚电路的每一段链路都有一个虚电路编号)。</p>
+<p>这种通信方式如果再使用可靠传输的网络协议，就可使所发送的分组最终正确到达接收方(无差错按序到达、不丢失、不重复)。</p>
+<p><strong>通信结束后，需要释放之前所建立的虚电路</strong>。</p>
+<p>很多广域分组交换网都使用面向连接的虚电路服务。例如，曾经的X.25和逐渐过时的帧中继FR、异步传输模式ATM等。</p>
+<h3 id="无连接的数据报服务">无连接的数据报服务</h3>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-2/4-2-2.png" alt=""  />
+</p>
+<p><strong>可靠通信应当由用户主机来保证</strong></p>
+<p><strong>不需要建立网络层连接</strong></p>
+<p><strong>每个分组可走不同的路径</strong></p>
+<p>每个分组的<strong>首部必须携带目的主机的完整地址</strong></p>
+<p>这种通信方式所传送的<strong>分组可能误码</strong>、<strong>丢失</strong>、<strong>重复</strong>和<strong>失序</strong>。</p>
+<p>由于<strong>网络本身不提供端到端的可靠传输服务</strong>，这就使网络中的路由器可以做得比较简单，而且价格低廉(与电信网的交换机相比较)。</p>
+<p>因特网采用了这种设计思想，也就是将<strong>复杂的网络处理功能置于因特网的边缘(用户主机和其内部的运输层)</strong>，而将相对简单的尽最大努力的分组交付功能置于因特网核心。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络4-1</title>
+      <link>https://blog.0pt.im/learn/1-4-1/</link>
+      <pubDate>Sat, 22 Jul 2023 18:09:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-4-1/</guid>
+      <description>四.网络层</description>
+      <content:encoded><![CDATA[<h1 id="网络层概述">网络层概述</h1>
+<p>网络层的主要任务是<strong>实现网络互连</strong>，进而<strong>实现数据包在各网络之间的传输</strong>。</p>
+<p>要实现网络层任务，需要解决以下主要问题:</p>
+<ul>
+<li>
+<p>网络层向运输层提供怎样的服务（“可靠传输”还是“不可靠传输”）</p>
+</li>
+<li>
+<p>网络层寻址问题</p>
+</li>
+<li>
+<p>路由选择问题</p>
+</li>
+</ul>
+<p><strong>因特网</strong>(Internet)是目前全世界用户数量最多的互联网，它使用<strong>TCP/IP协议栈</strong>。</p>
+<p>由于TCP/IP协议栈的网络层使用<strong>网际协议IP</strong>，它是整个协议栈的核心协议，因此在TCP/IP协议栈中网络层常称为<strong>网际层</strong>。</p>
+<p>综上所述，我们通过学习TCP/IP协议栈的网际层来学习网络层的理论知识和实践技术。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/4-1/4-1-1.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>从零开始的计算机网络3-11</title>
       <link>https://blog.0pt.im/learn/1-3-11/</link>
