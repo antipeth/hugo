@@ -22,6 +22,7 @@ params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   title: 春风少年兄
   description: "欢迎来到世纪大道"
+  ShowFullTextinRSS: true
   keywords: [Blog, Portfolio, PaperMod]
   author: Me
   # author: ["Me", "You"] # multiple authors
