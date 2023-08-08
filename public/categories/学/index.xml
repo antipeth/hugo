@@ -11,7 +11,593 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 07 Aug 2023 18:09:28 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/categories/%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 07 Aug 2023 18:17:28 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/categories/%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从零开始的计算机网络6-7</title>
+      <link>https://blog.0pt.im/learn/1-6-7/</link>
+      <pubDate>Mon, 07 Aug 2023 18:17:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-7/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="万维网www">万维网WWW</h1>
+<p>万维网WWW（World Wide Web）<strong>并非某种特殊的计算机网络。它是一个大规模的、联机式的信息储藏所,是运行在因特网上的一个分布式应用</strong>。</p>
+<p>万维网利用网页之间的<strong>超链接</strong>将不同网站的网页链接成一张逻辑上的信息网。</p>
+<p>万维网是欧洲粒子物理实验室的Tim Berners-Lee最初于1989年3月提出的。</p>
+<p>1993年2月，第一个图形界面的浏览器Mosaic</p>
+<p>1995年著名的Netscape Navigator浏览器上市。</p>
+<p>目前比较流行的浏览器如下:（后面是浏览器内核）</p>
+<p>Chrome    Blink</p>
+<p>Firefox    Gecko</p>
+<p>Safari    WebKit</p>
+<p>Opera    Blink</p>
+<p>lnternet Explorer    Trident</p>
+<p>浏览器最重要的部分是<strong>渲染引擎</strong>，也就是<strong>浏览器内核</strong>。负责对网页内容进行解析和显示。</p>
+<ul>
+<li>
+<p>不同的浏览器内核对网页内容的解析也有不同，因此同一网页在不同内核的浏览器里的显示效果可能不同;</p>
+</li>
+<li>
+<p>网页编写者需要在不同内核的浏览器中测试网页显示效果。</p>
+</li>
+</ul>
+<p>为了方便地访问在世界范围的文档，万维网使用<strong>统一资源定位符URL</strong>来指明因特网上任何种类“资源”的位置。URL的一般形式由以下四个部分组成:</p>
+<p>&lt;协议&gt;://&lt;主机&gt;:&lt;端口&gt;/&lt;路径&gt;</p>
+<p>万维网的文档</p>
+<ul>
+<li>
+<p>HTML    超文本标记语言HTML(HyperText Markup Language)，使用多种“标签”来描述<strong>网页的结构和内容</strong></p>
+</li>
+<li>
+<p>CSS    层叠样式表CSS(Cascading Style Sheets)，从审美的角度来描述<strong>网页的样式</strong></p>
+</li>
+<li>
+<p>JavaScript    一种脚本语言(和Java没有任何关系)，控制网页的行为</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-1.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-2.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-3.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-4.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-5.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-6.png" alt=""  />
+</p>
+<p>超文本传输协议HTTP(HyperText Transfer Protocol)</p>
+<p>HTTP定义了浏览器（即万维网客户进程）怎样向万维网服务器请求万维网文档，以及万维网服务器怎样把万维网文档传送给浏览器。</p>
+<p>HTTP/1.0采用<strong>非持续连接</strong>方式。在该方式下，每次浏览器要请求一个文件都要与服务器建立TCP连接,当收到响应后就立即关闭连接。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-7.png" alt=""  />
+</p>
+<ul>
+<li>
+<p><strong>每请求一个文档就要有两倍的RTT的开销</strong>。若一个网贝上有很多引用对家（例如图/守)，B求每一个对象都需要花费2RTT的时间。</p>
+</li>
+<li>
+<p>为了减小时延，浏览器通常会建立多个并行的TCP连接同时请求多个对象。但是，这会大量占用万维网服务器的资源，特别是万维网服务器往往要同时服务于大量客户的请求，这会使其负担很重。</p>
+</li>
+</ul>
+<p>HTTP/1.1采用<strong>持续连接</strong>方式。在该方式下，万维网服务器在发送响应后仍然保持这条连接，使同一个</p>
+<p>客户(浏览器）和该服务器可以继续在区条连孩上传达石续i人IIr阴水报THW队人。-I于传送同一个页面上引用的对象，而是只要这些文档都在同一个服务器上就行。</p>
+<ul>
+<li>为了进一步提高效率，HTTP/1.1的持续连接还可以使用<strong>流水线</strong>方式工作，即浏览器在收到HTTP的响应报文之前就能够连续发送多个请求报文。这样的一个接一个的请求报文到达服务器后，服务器就发回一个接一个的响应报文。这样就节省了很多个RTT时间，使TCP连接中的空闲时间减少，提高了下载文档的效率。</li>
+</ul>
+<p>HTTP的报文格式</p>
+<p>HTTP是<strong>面向文本</strong>的，其报文中的每一个<strong>字段</strong>都是一些<strong>ASCII码串</strong>，并且每个字段的<strong>长度</strong>都是<strong>不确定</strong>的。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-8.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-9.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-10.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-14.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-12.png" alt=""  />
+</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-13.png" alt=""  />
+</p>
+<p>使用Cookie在服务器上记录用户信息</p>
+<ul>
+<li>
+<p>早期的万维网应用非常简单，仅仅是用户查看存放在不同服务器上的各种静态的文档。因此HTTP被设计为一种<strong>无状态</strong>的协议。这样可以简化服务器的设计。</p>
+</li>
+<li>
+<p>现在，用户可以通过万维网实现各种复杂的应用，如网上购物、电子商务等。这些应用往往需要万维网服务器能够识别用户。</p>
+</li>
+<li>
+<p>Cookie提供了一种机制使得万维网服务器能够“记住”用户，而无需用户主动提供用户标识信息。也就是说，<strong>Cookie是一种对无状态的HTTP进行状态化的技术</strong>。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-15.png" alt=""  />
+</p>
+<p>万维网缓存与代理服务器</p>
+<ul>
+<li>
+<p>在万维网中还可以使用缓存机制以提高万维网的效率。</p>
+</li>
+<li>
+<p>万维网缓存又称为<strong>Web缓存</strong>(Web Cache)，可位于客户机，也可位于中间系统上，位于中间系统上的Web缓存又称为<strong>代理服务器</strong>(Proxy Server) 。</p>
+</li>
+<li>
+<p>Web缓存把最近的一些请求和响应暂存在本地磁盘中。<strong>当新请求到达时，若发现这个请求与暂时存放的请求相同，就返回暂存的响应，而不需要按URL的地址再次去因特网访问该资源。</strong></p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-16.png" alt=""  />
+</p>
+<p>试问：假如原始服务器的文档已修改，出现上图情况，主机请求到错误文档？</p>
+<p>通常情况，代理服务器会为每个响应对象设定一个修改时间字段（Last-Modified）和一个有效日期字段(Expires)。没过期正常响应，过期了向原始服务器发送请求，若文档无变化，如下</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-17.png" alt=""  />
+</p>
+<p>若文档有变化，如下</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-18.png" alt=""  />
+</p>
+<p>例题：某浏览器发出的HTTP请求报文如下</p>
+<p>GETlindex.html HTTP/1.1</p>
+<p>Host: <a href="https://www.test.edu.cn">www.test.edu.cn</a></p>
+<p>Connection: Close</p>
+<p>Cookie: 123456</p>
+<p>下列叙述中，错误的是</p>
+<p>A.该浏览器请求浏览index.html    B. index.html存放在www.test.edu.cn上</p>
+<p>C.该浏览器请求使用持续连接    D.该浏览器曾经浏览过www.test.edu.cn</p>
+<p>解析：</p>
+<p>请求行:指明方法GET，URL，HTTP版本</p>
+<p>首部行的开始:指明服务器的域名</p>
+<p>告诉服务器发送完请求的文档后就可释放连接，即非持续连接;</p>
+<p>若是持续连接方式，取值应为keep-alive，而不是Close</p>
+<p>这是服务器为浏览器生成的Cookie识别码，表明该浏览器曾经访问过www.test.edu.cn</p>
+<p>选C</p>
+<p>例题：假设HTTP1.1协议以持续的非流水线方式工作，一次请求-响应的时间为RTT,rfc.html页面引用了2个JPEG小图像，则浏览器从开始建立TCP连接到收到全部内容为止，需要多少个RTT?</p>
+<p>解析：</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-7/6-7-19.png" alt=""  />
+</p>
+<p>4个RTT</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络6-6</title>
+      <link>https://blog.0pt.im/learn/1-6-6/</link>
+      <pubDate>Mon, 07 Aug 2023 18:16:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-6/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="电子邮件">电子邮件</h1>
+<p>电子邮件（E-mail）是因特网上<strong>最早流行的一种应用</strong>，并且仍然是当今因特网上最重要、最实用的应用之一。</p>
+<p>传统的电话通信属于实时通信，存在以下两个缺点:</p>
+<ul>
+<li>
+<p>电话通信的主叫和被叫双方必须同时在场;</p>
+</li>
+<li>
+<p>一些不是十分紧迫的电话也常常不必要地打断人们的工作或休息。</p>
+</li>
+</ul>
+<p>而电子邮件与邮政系统的寄信相似。</p>
+<ul>
+<li>
+<p>发件人将邮件发送到自己使用的<strong>邮件服务器</strong>;</p>
+</li>
+<li>
+<p>发件人的邮件服务器将收到的邮件按其目的地址转发到收件人邮件服务器中的收件人邮箱;</p>
+</li>
+<li>
+<p>收件人在方便的时候访问收件人邮件服务器中自己的邮箱，获取收到的电子邮件。</p>
+</li>
+</ul>
+<p>电子邮件使用方便、传递迅速而且费用低廉。它不仅可以传送文字信息，而且还可附上声音和图像。</p>
+<p>由于电子邮件的广泛使用，现在许多国家已经正式取消了电报业务。在我国，<strong>电信局的电报业务也因电子邮件的普及而濒临消失</strong>。</p>
+<p>电子邮件系统采用<strong>客户/服务器方式</strong>。</p>
+<p>电子邮件系统的三个主要组成构件：<strong>用户代理，邮件服务器</strong>，以及<strong>电子邮件所需的协议</strong>。</p>
+<ul>
+<li>
+<p>用户代理是用户与电子邮件系统的接口，又称为电子邮件客户端软件。</p>
+</li>
+<li>
+<p>邮件服务器是电子邮件系统的基础设施。因特网上所有的ISP都有邮件服务器，其功能是发送和接收邮件，同时还要负责维护用户的邮箱。</p>
+</li>
+<li>
+<p>协议包括邮件发送协议（例如SMTP）和邮件读取协议（例如POP3，IMAP）。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-6/6-6-1.png" alt=""  />
+</p>
+<p>简单邮件传送协议SMTP (Simple Mail Transfer Protocol)的基本工作原理</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-6/6-6-2.png" alt=""  />
+</p>
+<p>注意:</p>
+<ul>
+<li>
+<p>1.为了简单起见，省略了认证过程;</p>
+</li>
+<li>
+<p>2.应答代码后面一般都跟有简单的描述信息;</p>
+</li>
+<li>
+<p>3.不同的SMTP服务器给出的相同应答代码的描述信息可能不同。</p>
+</li>
+</ul>
+<p>电子邮件的信息格式并不是由SMTP定义的，而是在RFC 822中单独定义的。这个RFC文档已在2008年更新为RFC 5322。一个电子邮件有<strong>信封</strong>和<strong>内容</strong>两部分。而内容又由<strong>首部</strong>和<strong>主体</strong>两部分构成。</p>
+<p><strong>SMTP协议只能传送ASCII码文本数据</strong>，不能传送可执行文件或其他的二进制对象。</p>
+<p>SMTP不能满足传送多媒体邮件（例如带有图片、音频或视频数据）的需要。并且许多其他非英语国家的文字（例如中文、俄文、甚至带有重音符号的法文或德文）也无法用SMTP传送。</p>
+<p>为解决SMTP传送非ASCII码文本的问题，提出了<strong>多用途因特网邮件扩展MIME</strong> (Multipurpose Internet MailExtensions)。</p>
+<ul>
+<li>
+<p>增加了<strong>5个新的邮件首部字段</strong>，这些字段提供了有关邮件主体的信息。</p>
+</li>
+<li>
+<p>定义了<strong>许多邮件内容的格式</strong>，对多媒体电子邮件的表示方法进行了标准化。</p>
+</li>
+<li>
+<p>定义了<strong>传送编码</strong>，可对任何内容格式进行转换，而不会被邮件系统改变。</p>
+</li>
+</ul>
+<p>实际上，MIME不仅仅用于SMTP，也用于后来的同样面向ASCII字符的HTTP。</p>
+<p>常用的邮件读取协议有以下两个:</p>
+<ul>
+<li>
+<p><strong>邮局协议POP</strong> (Post Office Protocol)，POP3是其第三个版本，是因特网正式标准。非常简单、功能有限的邮件读取协议。用户只能以<strong>下载并删除方式</strong>或<strong>下载并保留方式</strong>从邮件服务器下载邮件到用户方计算机。<strong>不允许用户在邮件服务器上管理自己的邮件</strong>。(例如创建文件夹，对邮件进行分类管理等)。</p>
+</li>
+<li>
+<p><strong>因特网邮件访问协议IMAP</strong> (Internet Message Access Protocol)，IMAP4是其第四个版本，目前还只是因特网建议标准。功能比POP3强大的邮件读取协议。<strong>用户在自己的计算机上就可以操控邮件服务器中的邮箱</strong>，就像在本地操控━样，因此IMAP是一个联机协议。</p>
+</li>
+<li>
+<p>POP3和IMAP4都采用<strong>基于TCP连接的客户/服务器方式</strong>。POP3使用熟知端口110，IMAP4使用熟知端口143。</p>
+</li>
+</ul>
+<p>基于万维网的电子邮件</p>
+<ul>
+<li>
+<p>通过<strong>浏览器</strong>登录（提供用户名和口令）<strong>邮件服务器万维网网站</strong>就可以撰写、收发、阅读和管理电子邮件。这种工作模式与IMAP很类似，不同的是用户计算机无需安装专门的用户代理程序，只需要使用通用的万维网浏览器。</p>
+</li>
+<li>
+<p>邮件服务器网站通常都提供非常强大和方便的邮件管理功能，用户可以在邮件服务器网站上管理和处理自己的邮件，而不需要将邮件下载到本地进行管理。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-6/6-6-3.png" alt=""  />
+</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络6-5</title>
+      <link>https://blog.0pt.im/learn/1-6-5/</link>
+      <pubDate>Mon, 07 Aug 2023 18:15:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-5/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="文件传送协议ftp">文件传送协议FTP</h1>
+<p>将某台计算机中的文件通过网络传送到可能相距很远的另一台计算机中，是一项基本的网络应用，即文件传送。<strong>文件传送协议FTP</strong> (File Transfer Protocol)是因特网上使用得最广泛的文件传送协议。</p>
+<ul>
+<li>
+<p>FTP<strong>提供交互式的访问</strong>，允许客户<strong>指明文件的类型与格式</strong>(如指明是否使用ASCII码)，并允许<strong>文件具有存取权限</strong>（如访问文件的用户必须经过授权，并输入有效的口令）。</p>
+</li>
+<li>
+<p><strong>FTP屏蔽了各计算机系统的细节，因而适合于在异构网络中任意计算机之间传送文件</strong>。</p>
+</li>
+</ul>
+<p>在因特网发展的早期阶段，用FTP传送文件约占整个因特网的通信量的三分之一，而由电子邮件和域名系统所产生的通信量还要小于FTP所产生的通信量。只是到了1995年，万维网WWW的通信量才首次超过了FTP。</p>
+<p>FTP的常见用途是在计算机之间传输文件，尤其是用于批量传输文件。</p>
+<p>FTP的另一个常见用途是让网站设计者将构成网站内容的大量文件批量上传到他们的Web服务器。</p>
+<p>FTP的基本工作原理</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-5/6-5-1.png" alt=""  />
+</p>
+<p>2:控制连接在整个会话期间一直保持打开，用于传送FTP相关控制命令。</p>
+<p>5:数据连接用于文件传输，在每次文件传输时才建立，传输结束就关闭。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-5/6-5-2.png" alt=""  />
+</p>
+<p>例题：FTP客户和服务器间传递FTP命令时，使用的连接是</p>
+<p>A.建立在TCP之上的控制连接    B.建立在TCP之上的数据连接</p>
+<p>C.建立在UDP之上的控制连接    D.建立在UDP之上的数据连接</p>
+<p>解析：FTP客户和服务器之间要建立以下两个并行的TCP连接:</p>
+<p>一个是控制连接，在整个会话期间一直保持打开，用于传送FTP相关控制命令.另一个是数据连接，用于文件传输，在每次文件传输时才建立，传输结束就关闭。</p>
+<p>例题：下列关于FTP协议的叙述中，错误的是</p>
+<p>A.数据连接在每次数据传输完毕后就关闭   B.控制连接在整个会话期间保持打开状态</p>
+<p>C.服务器与客户端的TCP20端口建立数据连接  D.客户端与服务器的TCP21端口建立控制连接</p>
+<p>解析：FTP客户和服务器之间要建立“控制连接”和“数据连接”这两个并行的TCP连接。控制连接在整个会话期间都保持打开状态，而数据连接在每次文件传输时才建立，传输结束就关闭。</p>
+<p>默认情况下，FTP使用TCP21端口进行控制连接，TCP20端口进行数据连接。</p>
+<p>但是，是否使用TCP 20端口建立数据连接与传输模式有关，主动方式使用TCP20端口，被动方式由服务器和客户端自行协商决定。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络6-4</title>
+      <link>https://blog.0pt.im/learn/1-6-4/</link>
+      <pubDate>Mon, 07 Aug 2023 18:14:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-4/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="域名系统dns-domain-name-system">域名系统DNS (Domain Name System)</h1>
+<p>早在1983年，因特网就开始采用<strong>层次结构的命名树</strong>作为主机的名字（即域名），并使用<strong>分布式的域名系统</strong>DNS。</p>
+<p>DNS使<strong>大多数域名都在本地解析</strong>，仅少量解析需要在因特网上通信，因此系统效率很高。</p>
+<p>由于DNS是分布式系统，即使单个计算机出了故障，也不会妨碍整个系统的正常运行。</p>
+<p>因特网采用<strong>层次树状结构的域名结构</strong></p>
+<p>域名的结构由若干个分量组成，各分量之间用“点”隔开，分别代表不同级别的域名。</p>
+<p>···.三级域名.二级域名.顶级域名</p>
+<ul>
+<li>
+<p>每一级的域名都由英文字母和数字组成，不超过63个字符，不区分大小写字母。</p>
+</li>
+<li>
+<p>级别最低的域名写在最左边，而级别最高的顶级域名写在最右边。</p>
+</li>
+<li>
+<p>完整的域名不超过255个字符。</p>
+</li>
+</ul>
+<p>域名系统既不规定一个域名需要包含多少个下级域名，也不规定每一级的域名代表什么意思。</p>
+<p>各级域名由其上一级的域名管理机构管理，而最高的顶级域名则由因特网名称与数字地址分配机构ICANN进行管理。</p>
+<p>顶级域名TLD (Top Level Domain)分为以下三类:</p>
+<ul>
+<li>
+<p>国家顶级域名nTLD    采用ISO 3166的规定。如cn表示中国，us表示美国，uk表示英国、等等。</p>
+</li>
+<li>
+<p>通用顶级域名gTLD    最常见的通用顶级域名有七个，即:com(公司企业)、net (网络服务机构)、org (非营利性组织)、int(国际组织)、edu(美国教育结构)、gov(美国政府部门) . mil(美国军事部门)。</p>
+</li>
+<li>
+<p>反向域arpa    用于反向域名解析，即IP地址反向解析为域名。</p>
+</li>
+</ul>
+<p>在<strong>国家顶级域名下注册的二级域名均由该国家自行确定</strong>。例如，顶级域名为jp的日本，将其教育和企业机构的二级域名定为ac和co，而不用edu和com。</p>
+<p><strong>我国</strong>则将<strong>二级域名</strong>划分为以下<strong>两类</strong>:</p>
+<ul>
+<li>
+<p>类别域名    共七个: ac(科研机构)、com (工、商、金融等企业)、edu(教育机构)、gov(政府部门)、net(提供网络服务的机构)、mil(军事机构)和org (非营利性组织)。</p>
+</li>
+<li>
+<p>行政区域名    共34个，适用于我国的各省、自治区、直辖市。例如: bj为北京市、sh为上海市、js为江苏省，等等。</p>
+</li>
+</ul>
+<p>举例：因特网的域名空间</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-4/6-4-1.png" alt=""  />
+</p>
+<p>这种按等级管理的命名方法便于维护名字的唯一性，并且也容易设计出一种高效的域名查询机制。需要注意的是，域名只是个逻辑概念，并不代表计算机所在的物理地点。</p>
+<p>域名和IP地址的映射关系必须保存在域名服务器中，供所有其他应用查询。显然不能将所有信息都储存在一台域名服务器中。DNS使用<strong>分布在各地的域名服务器</strong>来实现域名到IP地址的转换。</p>
+<p>域名服务器可以划分为以下四种不同的类型:</p>
+<ul>
+<li>
+<p>根域名服务器    根域名服务器是最高层次的域名服务器。每个根域名服务器都知道所有的顶级域名服务器的域名及其IP地址。因特网上共有13个不同IP地址的根域名服务器。尽管我们将这13个根域名服务器中的每一个都视为单个的服务器，但“每台服务器”实际上是由许多分布在世界各地的计算机构成的<strong>服务器群集</strong>。当本地域名服务器向根域名服务器发出查询请求时，路由器就把查询请求报文转发到离这个DNS客户最近的一个根域名服务器。这就加快了DNS的查询过程，同时也更合理地利用了因特网的资源。<strong>根域名服务器通常并不直接对域名进行解析，而是返回该域名所属顶级域名的顶级域名服务器的IP地址</strong>。</p>
+</li>
+<li>
+<p>顶级域名服务器    这些域名服务器负责<strong>管理在该顶级域名服务器注册的所有二级域名</strong>。当收到DNS查询请求时就给出相应的回答（可能是最后的结果，也可能是下一级权限域名服务器的IP地址）。</p>
+</li>
+<li>
+<p>权限域名服务器    这些域名服务器负责<strong>管理某个区的域名</strong>。每一个主机的域名都必须在某个权限域名服务器处注册登记。因此权限域名服务器知道其管辖的域名与IP地址的映射关系。另外，权限域名服务器还知道其下级域名服务器的地址。</p>
+</li>
+<li>
+<p>本地域名服务器    本地域名服务器不属于上述的域名服务器的等级结构。当一个主机发出DNS请求报文时，这个报文就首先被送往该主机的本地域名服务器。<strong>本地域名服务器起着代理的作用，会将该报文转发到上述的域名服务器的等级结构中</strong>。每一个因特网服务提供者ISP，一个大学，甚至一个大学里的学院，都可以拥有一个本地域名服务器，它有时也称为<strong>默认域名服务器</strong>。本地域名服务器离用户较近，一般不超过几个路由器的距离，也有可能就在同一个局域网中。本地域名服务器的IP地址需要直接配置在需要域名解析的主机中。</p>
+</li>
+</ul>
+<p>域名解析的过程</p>
+<ul>
+<li>
+<p>递归查询</p>
+</li>
+<li>
+<p>迭代查询</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-4/6-4-2.png" alt=""  />
+</p>
+<p>由于递归查询对于被查询大，通常采用以下模式:从请求主机到本地域名服务器的查询是递归查询，而其余的查询是迭代查询。</p>
+<p>为了提高DNS的查询效率，并减轻根域名服务器的负荷和减少因特网上的DNS查询报文数量，在域名服务器中广泛地使用了<strong>高速缓存</strong>。高速缓存用来存放最近查询过的域名以及从何处获得域名映射信息的记录。</p>
+<p>由于域名到IP地址的映射关系并不是永久不变，为保持高速缓存中的内容正确，域名服务器<strong>应为每项内容设置计时器并删除超过合理时间的项</strong>（例如，每个项目只存放两天)。</p>
+<p>不但在本地域名服务器中需要高速缓存，在用户主机中也很需要。许多用户主机在启动时从本地域名服务器下载域名和IP地址的全部数据库，维护存放自己最近使用的域名的高速缓存，并且只在从缓存中找不到域名时才向域名服务器查询。同理，主机也需要保持高速缓存中内容的正确性。</p>
+<p>例题：假设所有域名服务器均采用迭代查询方式进行域名解析，当H4访问规范域名为www.abc.xyz.com的网站时，域名服务器201.1.1.1在完成该域名解析过程中，可能发出DNS查询的最少和最多次数分别是</p>
+<p>A.0，3    B.1，3    C.0，4    D.1，4</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-4/6-4-3.png" alt=""  />
+</p>
+<p>解析：</p>
+<p>若主机H4的DNS高速缓存中有该域名的DNS信息时，不需要查询任何域名服务器。这样，H4无需向图中的默认域名服务器（本地域名服务器）发出DNS查询，该域名服务器也无需发出DNS查询。</p>
+<p>题目给定采用迭代查询进行域名解析，在最坏的情况下，需要图中的本地域名服务器依次向以下域名服务器发出共4次DNS查询:</p>
+<ul>
+<li>
+<p>根域名服务器</p>
+</li>
+<li>
+<p>顶级域名服务器(.com)</p>
+</li>
+<li>
+<p>权限域名服务器(xyz.com)</p>
+</li>
+<li>
+<p>权限域名服务器(abc.xyz.com)</p>
+</li>
+</ul>
+<p>选C</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络6-3</title>
+      <link>https://blog.0pt.im/learn/1-6-3/</link>
+      <pubDate>Mon, 07 Aug 2023 18:13:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-3/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="动态主机配置协议dhcp">动态主机配置协议DHCP</h1>
+<p>DHCP的作用</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-3/6-3-1.png" alt=""  />
+</p>
+<p>人工配置工作量大，容易出错。</p>
+<p>DHCP的工作过程</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-3/6-3-2.png" alt=""  />
+</p>
+<p>DHCP服务器为DHCP客户分配IP时，使用ARP确保所选IP地址未被网络中其他主机占用。</p>
+<p>DHCP客户接受确认IP地址租约时，使用ARP检测所分配到的IP地址是否已被网络中其他主机占用:</p>
+<ul>
+<li>
+<p>若被占用:给DHCP服务器发送“DHCPDECLINE”报文撤销IP地址租约，并重新发送“DHCP DISCOVER”报文;</p>
+</li>
+<li>
+<p>若未被占用:可以使用租约中的IP地址与网络中其他主机通信了。</p>
+</li>
+</ul>
+<p>DHCP中继代理</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/6-3/6-3-3.png" alt=""  />
+</p>
+<p>原本路由器不转发广播，所以得给路由器配置，使之成为DHCP中继代理。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络6-2</title>
+      <link>https://blog.0pt.im/learn/1-6-2/</link>
+      <pubDate>Mon, 07 Aug 2023 18:12:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-2/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="客户服务器方式cs方式和对等方式p2p方式">客户/服务器方式（C/S方式）和对等方式（P2P方式）</h1>
+<p>网络应用程序运行在处于网络边缘的不同的端系统上，通过彼此间的通信来共同完成某项任务。</p>
+<p>开发一种新的网络应用首先要考虑的问题就是<strong>网络应用程序在各种端系统上的组织方式和它们之间的关系</strong>。目前流行的主要有以下两种：</p>
+<ul>
+<li>
+<p>客户/服务器(Client/Server，C/S)方式</p>
+</li>
+<li>
+<p>对等(Peer-to-Peer，P2P)方式</p>
+</li>
+</ul>
+<p>客户/服务器(Client/Server,C/S)方式</p>
+<ul>
+<li>
+<p>客户和服务器是指通信中所涉及的两个应用进程。</p>
+</li>
+<li>
+<p>客户/服务器方式所描述的是进程之间服务和被服务的关系。</p>
+</li>
+<li>
+<p><strong>客户是服务请求方，服务器是服务提供方。</strong></p>
+</li>
+<li>
+<p><strong>服务器总是处于运行状态，并等待客户的服务请求。服务器具有固定端口号（例如HTTP服务器的默认端口号为80），而运行服务器的主机也具有固定的IP地址。</strong></p>
+</li>
+</ul>
+<p>C/S方式是因特网上传统的、同时也是最成熟的方式，很多我们熟悉的网络应用采用的都是C/S方式。包括万维网www、电子邮件、文件传输FTP等。</p>
+<p>基于C/S方式的应用服务通常是<strong>服务集中型</strong>的，即应用服务集中在网络中比客户计算机少得多的服务器计算机上。</p>
+<ul>
+<li>
+<p>由于一台服务器计算机要为多个客户机提供服务，在C/S应用中，<strong>常会出现服务器计算机跟不上众多客户机请求的情况</strong>。</p>
+</li>
+<li>
+<p>为此，在C/S应用中，常用<strong>计算机群集</strong>（或服务器场）构建一个强大的<strong>虚拟服务器</strong>。</p>
+</li>
+</ul>
+<p>对等(Peer-to-Peer，P2P)方式</p>
+<ul>
+<li>在P2P方式中，<strong>没有固定的服务请求者和服务提供者</strong>，分布在网络边缘各端系统中的应用进程是对等的，被称为<strong>对等方</strong>。<strong>对等方相互之间直接通信</strong>，每个对等方既是服务的请求者，又是服务的提供者。</li>
+</ul>
+<p>目前，在因特网上流行的P2P应用主要包括P2P文件共享、即时通信、P2P流媒体、分布式存储等。</p>
+<p>基于P2P的应用是<strong>服务分散型</strong>的，因为服务不是集中在少数几个服务器计算机中，而是分散在大量对等计算机中，这些计算机并不为服务提供商所有，而是为个人控制的桌面计算机和笔记本电脑，它们通常位于住宅、校园和办公室中。</p>
+<p>P2P方式的最突出特性之一就是它的<strong>可扩展性</strong>。因为系统每增加一个对等方，不仅增加的是服务的请求者，同时也增加了服务的提供者，<strong>系统性能不会因规模的增大而降低</strong>。</p>
+<p>P2P方式<strong>具有成本上的优势</strong>，因为它通常不需要庞大的服务器设施和服务器带宽。为了降低成本，服务提供商对于将P2P方式用于应用的兴趣越来越大。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络6-1</title>
+      <link>https://blog.0pt.im/learn/1-6-1/</link>
+      <pubDate>Mon, 07 Aug 2023 18:11:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-6-1/</guid>
+      <description>六.应用层</description>
+      <content:encoded><![CDATA[<h1 id="应用层概述">应用层概述</h1>
+<p>应用层是计算机网络体系结构的<strong>最顶层</strong>，是<strong>设计和建立计算机网络的最终目的</strong>，也是计算机网络中发展最快的部分。</p>
+<ul>
+<li>
+<p>早期基于文本的应用（电子邮件、远程登录、文件传输、新闻组）</p>
+</li>
+<li>
+<p>20世纪90年代将因特网带入千家万户的万维网www</p>
+</li>
+<li>
+<p>当今流行的即时通信、P2P文件共享及各种音视频应用</p>
+</li>
+<li>
+<p>计算设备的小型化和“无处不在”，宽带住宅接入和无线接入的日益普及和迅速发展，为未来更多的新型应用提供了广阔的舞台。</p>
+</li>
+</ul>
+<p>在本章中，我们以一些经典的网络应用为例来学习有关网络应用的原理、协议和实现方面的知识。</p>
+<p>万维网www</p>
+<p>域名系统DNS</p>
+<p>动态主机配置DHCP</p>
+<p>电子邮件</p>
+<p>文件传送FTP和P2P文件共享</p>
+<p>多媒体网络应用</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>从零开始的计算机网络5-9</title>
+      <link>https://blog.0pt.im/learn/1-5-9/</link>
+      <pubDate>Mon, 07 Aug 2023 18:10:28 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/learn/1-5-9/</guid>
+      <description>五.运输层</description>
+      <content:encoded><![CDATA[<h1 id="tcp报文段的首部格式">TCP报文段的首部格式</h1>
+<p>为了实现可靠传输，TCP采用了<strong>面向字节流</strong>的方式。但TCP在发送数据时，是从发送缓存取出一部分或全部字节并给其添加一个首部使之成为<strong>TCP报文段</strong>后进行发送。</p>
+<ul>
+<li>
+<p>一个TCP报文段由首部和数据载荷两部分构成;</p>
+</li>
+<li>
+<p>TCP的全部功能都体现在它首部中各字段的作用。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-9/5-9-1.png" alt=""  />
+</p>
+<p>源端口：占16比特，写入源端口号，用来标识发送该TCP报文段的应用进程。
+目的端口：占16比特，写入目的端口号，用来标识接收该TCP报文段的应用进程。</p>
+<p>序号:占32比特，取值范围[0,2^32 - 1]，序号增加到最后一个后，下一个序号就又回到
+<strong>指出本TCP报文段数据载荷的第一个字节的序号</strong>。</p>
+<p><img loading="lazy" src="https://img.0pt.im/computernet/5-9/5-9-2.png" alt=""  />
+</p>
+<p><strong>确认号</strong>:占32比特，取值范围[0,2^32 -1]，确认号增加到最后一个后，下一个确认号就又回到0。
+<strong>指出期望收到对方下一个TCP报文段的数据载荷的第一个字节的序号，同时也是对之前收到的所有数据的确认。</strong></p>
+<p>若确认号=n，则表明到序号n-1为止的所有数据都已正确接收，期望接收序号为n的数据。</p>
+<p><strong>确认标志位ACK</strong>:取值为1时确认号字段才有效;取值为0时确认号字段无效。</p>
+<p>TCP规定，在连接建立后所有传送的TCP报文段都必须把ACK置1。</p>
+<p><strong>数据偏移</strong>：占4比特，并以4字节为单位。</p>
+<p>用来指出TCP报文段的数据载荷部分的起始处距离TCP报文段的起始处有多远。</p>
+<p>这个字段实际上是指出了TCP报文段的首部长度。</p>
+<p>首部固定长度为20字节，因此数据偏移字段的最小值为(0101)（二进制）</p>
+<p>首部最大长度为60字节，因此数据偏移字段的最大值为(1111)（二进制）</p>
+<p>如数据偏移=0101，转换成十进制为5，所以首部长度为5 * 4字节 = 20字节</p>
+<p><strong>窗口</strong>：占16比特，以字节为单位。<strong>指出发送本报文段的一方的接收窗口</strong>。</p>
+<p>窗口值作为接收方让发送方设置其发送窗口的依据。</p>
+<p>这是以接收方的接收能力来控制发送方的发送能力，称为流量控制。</p>
+<p><strong>校验和</strong>：占16比特，检查范围包括TCP报文段的首部和数据载荷两部分。</p>
+<p>在计算校验和时，要在TCP报文段的前面加上12字节的伪首部。</p>
+<p><strong>同步标志位SYN</strong>：在TCP连接建立时用来同步序号。</p>
+<p><strong>终止标志位FIN</strong>:用来释放TCP连接。</p>
+<p><strong>复位标志位RST</strong>:用来复位TCP连接。</p>
+<p>当RST=1时，表明TCP连接出现了异常,必须释放连接，然后再重新建立连接。</p>
+<p>RST置1还用来拒绝一个非法的报文段或拒绝打开一个TCP连接。</p>
+<p><strong>推送标志位PSH</strong>：接收方的TCP收到该标志位为1的报文段会<strong>尽快上交应用进程</strong>，
+而不必等到接收缓存都填满后再向上交付。</p>
+<p><strong>紧急标志位URG</strong>：取值为1时紧急指针字段有效;取值为0时紧急指针字段无效。
+<strong>紧急指针</strong>：占16比特，以字节为单位，用来指明紧急数据的长度。
+当发送方有紧急数据时，可将紧急数据插队到发送缓存的最前面，并立刻封装到一个TCP报文段中进行发送。紧急指针会指出本报文段数据载荷部分包含了多长的紧急数据，紧急数据之后是普通数据。</p>
+<p><strong>选项</strong></p>
+<p><strong>最大报文段长度MSS选项</strong>：TCP报文段数据载荷部分的最大长度。</p>
+<p><strong>窗口扩大选项</strong>：为了扩大窗口(提高吞吐率)。</p>
+<p><strong>时间戳选项</strong>:</p>
+<ul>
+<li>
+<p>用来计算往返时间RTT</p>
+</li>
+<li>
+<p>用于处理序号超范围的情况，又称为防止序号绕回PAWS。</p>
+</li>
+</ul>
+<p><strong>选择确认选项</strong></p>
+<p><strong>填充</strong>：由于选项的长度可变，因此使用填充来确保报文段首部能被4整除
+（因为数据偏移字段，也就是首部长度字段，是以4字节为单位的）。</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>从零开始的计算机网络5-8</title>
       <link>https://blog.0pt.im/learn/1-5-8/</link>
