@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>游 on 春风少年兄</title>
+    <link>https://blog.0pt.im/zh/categories/%E6%B8%B8/</link>
+    <description>Recent content in 游 on 春风少年兄</description>
+    <image>
+      <title>春风少年兄</title>
+      <url>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 05 Nov 2023 00:48:58 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/categories/%E6%B8%B8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>docker搭建泰拉瑞亚Tshock服务器</title>
+      <link>https://blog.0pt.im/game/0-0-1/</link>
+      <pubDate>Sun, 05 Nov 2023 00:48:58 +0800</pubDate>
+      
+      <guid>https://blog.0pt.im/game/0-0-1/</guid>
+      <description>环境 Debian11
+安装docker apt update apt install docker 部署镜像 拉取镜像 docker pull ryshe/terraria 运行容器 创建一个世界 docker run -it -p 7777:7777 --rm -v $HOME/terraria/world:/root/.local/share/Terraria/Worlds ryshe/terraria:latest 这里的 $HOME 指的是你当前所在目录。也可以指定一个想要存放游戏文件的目录。
+比如我的目录是/var/lib/docker/volumes/terraria/_data
+所以我的命令是
+docker run -it -p 7777:7777 --rm -v /var/lib/docker/volumes/terraria/_data/terraria/world:/root/.local/share/Terraria/Worlds ryshe/terraria:latest 执行后会出现服务器的界面
+接下来根据提示，创建一个世界。
+创建完了。
+这个时候先可以退出ssh。
+配置Tshock强制开荒 在刚才的$HOME/terraria/world目录下，找到配置文件config.json和sscconfig.json
+这是tshock的配置文件，可以参考下面我的配置文件进行更改。
+{ &amp;#34;Settings&amp;#34;: { &amp;#34;ServerPassword&amp;#34;: &amp;#34;&amp;#34;, // 服务器密码 &amp;#34;ServerPort&amp;#34;: 7777, // 服务器端口 &amp;#34;MaxSlots&amp;#34;: 8, // 最大玩家槽位 &amp;#34;ReservedSlots&amp;#34;: 20, // 预留槽位 &amp;#34;ServerName&amp;#34;: &amp;#34;&amp;#34;, // 服务器名称 &amp;#34;UseServerName&amp;#34;: false, // 使用服务器名称 &amp;#34;LogPath&amp;#34;: &amp;#34;tshock/logs&amp;#34;, // 日志路径 &amp;#34;DebugLogs&amp;#34;: false, // 调试日志 &amp;#34;DisableLoginBeforeJoin&amp;#34;: false, // 加入前禁止登录 &amp;#34;IgnoreChestStacksOnLoad&amp;#34;: false, // 加载时忽略储物箱叠放 &amp;#34;WorldTileProvider&amp;#34;: &amp;#34;default&amp;#34;, &amp;#34;AutoSave&amp;#34;: true, // 自动保存 &amp;#34;AnnounceSave&amp;#34;: true, // 保存时公告 &amp;#34;ShowBackupAutosaveMessages&amp;#34;: true, // 显示备份和自动保存信息 &amp;#34;BackupInterval&amp;#34;: 10, // 备份间隔 &amp;#34;BackupKeepFor&amp;#34;: 240, // 保留备份时间 &amp;#34;SaveWorldOnCrash&amp;#34;: true, // 崩溃时保存世界 &amp;#34;SaveWorldOnLastPlayerExit&amp;#34;: true, // 最后一个玩家退出时保存世界 &amp;#34;InvasionMultiplier&amp;#34;: 1, // 入侵倍增器 &amp;#34;DefaultMaximumSpawns&amp;#34;: 5, // 默认最大生成数量 &amp;#34;DefaultSpawnRate&amp;#34;: 600, // 默认生成速率 &amp;#34;InfiniteInvasion&amp;#34;: false, // 无限入侵 &amp;#34;PvPMode&amp;#34;: &amp;#34;normal&amp;#34;, // PvP模式 &amp;#34;SpawnProtection&amp;#34;: false, // 出生点保护 &amp;#34;SpawnProtectionRadius&amp;#34;: 10, // 出生点保护半径 &amp;#34;RangeChecks&amp;#34;: true, // 范围检查 &amp;#34;HardcoreOnly&amp;#34;: false, // 仅极限模式 &amp;#34;MediumcoreOnly&amp;#34;: false, // 仅中核模式 &amp;#34;SoftcoreOnly&amp;#34;: false, // 仅软核模式 &amp;#34;DisableBuild&amp;#34;: false, // 禁止建筑 &amp;#34;DisableHardmode&amp;#34;: false, // 禁止极限模式 &amp;#34;DisableDungeonGuardian&amp;#34;: false, // 禁止地牢守卫者 &amp;#34;DisableClownBombs&amp;#34;: false, // 禁止小丑炸弹 &amp;#34;DisableSnowBalls&amp;#34;: false, // 禁止雪球 &amp;#34;DisableTombstones&amp;#34;: false, // 禁止墓碑 &amp;#34;DisablePrimeBombs&amp;#34;: false, // 禁止机械首领炸弹 &amp;#34;ForceTime&amp;#34;: &amp;#34;normal&amp;#34;, // 强制时间 &amp;#34;DisableInvisPvP&amp;#34;: false, // 禁止隐形PvP &amp;#34;MaxRangeForDisabled&amp;#34;: 10, // 禁用的最大范围 &amp;#34;RegionProtectChests&amp;#34;: false, // 区域保护储物箱 &amp;#34;RegionProtectGemLocks&amp;#34;: false, // 区域保护宝石锁 &amp;#34;IgnoreProjUpdate&amp;#34;: false, // 忽略投射物更新 &amp;#34;IgnoreProjKill&amp;#34;: false, // 忽略投射物击杀 &amp;#34;AllowCutTilesAndBreakables&amp;#34;: false, &amp;#34;AllowIce&amp;#34;: false, // 允许冰 &amp;#34;AllowCrimsonCreep&amp;#34;: true, // 允许猩红蔓延 &amp;#34;AllowCorruptionCreep&amp;#34;: true, // 允许腐化蔓延 &amp;#34;AllowHallowCreep&amp;#34;: true, // 允许神圣蔓延 &amp;#34;StatueSpawn200&amp;#34;: 3, &amp;#34;StatueSpawn600&amp;#34;: 6, &amp;#34;StatueSpawnWorld&amp;#34;: 10, &amp;#34;PreventBannedItemSpawn&amp;#34;: true, // 防止被封禁物品生成 &amp;#34;PreventDeadModification&amp;#34;: true, // 防止死亡修改 &amp;#34;PreventInvalidPlaceStyle&amp;#34;: true, // 防止无效的放置样式 &amp;#34;ForceXmas&amp;#34;: false, // 强制圣诞节 &amp;#34;ForceHalloween&amp;#34;: false, // 强制万圣节 &amp;#34;AllowAllowedGroupsToSpawnBannedItems&amp;#34;: false, // 允许有权限的组生成被封禁物品 &amp;#34;RespawnSeconds&amp;#34;: 15, // 重生时间（秒） &amp;#34;RespawnBossSeconds&amp;#34;: 10, // Boss战重生时间（秒） &amp;#34;AnonymousBossInvasions&amp;#34;: true, // 匿名Boss入侵 &amp;#34;MaxHP&amp;#34;: 500, // 最大生命值 &amp;#34;MaxMP&amp;#34;: 200, // 最大魔力值 &amp;#34;BombExplosionRadius&amp;#34;: 5, // 炸弹爆炸半径 &amp;#34;GiveItemsDirectly&amp;#34;: false, // 直接给予物品 &amp;#34;DefaultRegistrationGroupName&amp;#34;: &amp;#34;default&amp;#34;, // 默认注册组名称 &amp;#34;DefaultGuestGroupName&amp;#34;: &amp;#34;guest&amp;#34;, // 默认访客组名称 &amp;#34;RememberLeavePos&amp;#34;: true, // 记住离开位置 &amp;#34;MaximumLoginAttempts&amp;#34;: 10, // 最大登录尝试次数 &amp;#34;KickOnMediumcoreDeath&amp;#34;: false, // 中核模式死亡踢出 &amp;#34;MediumcoreKickReason&amp;#34;: &amp;#34;死亡导致踢出&amp;#34;, // 中核模式踢出原因 &amp;#34;BanOnMediumcoreDeath&amp;#34;: false, // 中核模式死亡封禁 &amp;#34;MediumcoreBanReason&amp;#34;: &amp;#34;死亡导致封禁&amp;#34;, // 中核模式封禁原因 &amp;#34;DisableDefaultIPBan&amp;#34;: false, // 禁用默认IP封禁 &amp;#34;EnableWhitelist&amp;#34;: false, // 启用白名单 &amp;#34;WhitelistKickReason&amp;#34;: &amp;#34;您不在白名单中。&amp;#34;, // 白名单踢出原因 &amp;#34;ServerFullReason&amp;#34;: &amp;#34;服务器已满&amp;#34;, // 服务器已满原因 &amp;#34;ServerFullNoReservedReason&amp;#34;: &amp;#34;服务器已满。没有预留槽位。&amp;#34;, // 服务器已满没有预留槽位原因 &amp;#34;KickOnHardcoreDeath&amp;#34;: false, // 极限模式死亡踢出 &amp;#34;HardcoreKickReason&amp;#34;: &amp;#34;死亡导致踢出&amp;#34;, // 极限模式踢出原因 &amp;#34;BanOnHardcoreDeath&amp;#34;: false, // 极限模式死亡封禁 &amp;#34;HardcoreBanReason&amp;#34;: &amp;#34;死亡导致封禁&amp;#34;, // 极限模式封禁原因 &amp;#34;KickProxyUsers&amp;#34;: true, // 踢出代理用户 &amp;#34;RequireLogin&amp;#34;: true, // 需要登录 &amp;#34;AllowLoginAnyUsername&amp;#34;: true, // 允许任何用户名登录 &amp;#34;AllowRegisterAnyUsername&amp;#34;: true, // 允许注册任何用户名 &amp;#34;MinimumPasswordLength&amp;#34;: 4, // 最小密码长度 &amp;#34;BCryptWorkFactor&amp;#34;: 7, // BCrypt工作因子 &amp;#34;DisableUUIDLogin&amp;#34;: false, // 禁用UUID登录 &amp;#34;KickEmptyUUID&amp;#34;: false, // 踢出空UUID &amp;#34;TilePaintThreshold&amp;#34;: 15, // 瓷砖绘制阈值 &amp;#34;KickOnTilePaintThresholdBroken&amp;#34;: false, // 瓷砖绘制阈值破坏踢出 &amp;#34;MaxDamage&amp;#34;: 51175, // 最大伤害 &amp;#34;MaxProjDamage&amp;#34;: 51175, // 最大投射物伤害 &amp;#34;KickOnDamageThresholdBroken&amp;#34;: false, // 伤害阈值破坏踢出 &amp;#34;TileKillThreshold&amp;#34;: 1060, // 瓷砖击杀阈值 &amp;#34;KickOnTileKillThresholdBroken&amp;#34;: false, // 瓷砖击杀阈值破坏踢出 &amp;#34;TilePlaceThreshold&amp;#34;: 1032, // 瓷砖放置阈值 &amp;#34;KickOnTilePlaceThresholdBroken&amp;#34;: false, // 瓷砖放置阈值破坏踢出 &amp;#34;TileLiquidThreshold&amp;#34;: 1050, // 瓷砖液体阈值 &amp;#34;KickOnTileLiquidThresholdBroken&amp;#34;: false, // 瓷砖液体阈值破坏踢出 &amp;#34;ProjIgnoreShrapnel&amp;#34;: true, // 投射物忽略破片 &amp;#34;ProjectileThreshold&amp;#34;: 1050, // 投射物阈值 &amp;#34;KickOnProjectileThresholdBroken&amp;#34;: false, // 投射物阈值破坏踢出 &amp;#34;HealOtherThreshold&amp;#34;: 1050, // 治愈他人阈值 &amp;#34;KickOnHealOtherThresholdBroken&amp;#34;: false, // 治愈他人阈值破坏踢出 &amp;#34;SuppressPermissionFailureNotices&amp;#34;: false, // 抑制权限失败通知 &amp;#34;DisableModifiedZenith&amp;#34;: false, // 禁用修改过的巅峰 &amp;#34;DisableCustomDeathMessages&amp;#34;: true, // 禁用自定义死亡消息 &amp;#34;CommandSpecifier&amp;#34;: &amp;#34;/&amp;#34;, // 命令指示符 &amp;#34;CommandSilentSpecifier&amp;#34;: &amp;#34;.</description>
+      <content:encoded><![CDATA[<h1 id="环境">环境</h1>
+<p>Debian11</p>
+<h1 id="安装docker">安装docker</h1>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install docker
+</span></span></code></pre></div><h1 id="部署镜像">部署镜像</h1>
+<h2 id="拉取镜像">拉取镜像</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker pull ryshe/terraria
+</span></span></code></pre></div><h2 id="运行容器">运行容器</h2>
+<h3 id="创建一个世界">创建一个世界</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it -p 7777:7777 --rm -v <span class="nv">$HOME</span>/terraria/world:/root/.local/share/Terraria/Worlds ryshe/terraria:latest
+</span></span></code></pre></div><p>这里的 <code>$HOME</code> 指的是你当前所在目录。也可以指定一个想要存放游戏文件的目录。</p>
+<p>比如我的目录是/var/lib/docker/volumes/terraria/_data</p>
+<p>所以我的命令是</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it -p 7777:7777 --rm -v /var/lib/docker/volumes/terraria/_data/terraria/world:/root/.local/share/Terraria/Worlds ryshe/terraria:latest
+</span></span></code></pre></div><p>执行后会出现服务器的界面</p>
+<p><img loading="lazy" src="https://img.0pt.im/game/built-tr/1-1.png" alt=""  />
+</p>
+<p>接下来根据提示，创建一个世界。</p>
+<p><img loading="lazy" src="https://img.0pt.im/game/built-tr/1-2.png" alt=""  />
+</p>
+<p>创建完了。</p>
+<p>这个时候先可以退出ssh。</p>
+<h3 id="配置tshock强制开荒">配置Tshock强制开荒</h3>
+<p>在刚才的<code>$HOME/terraria/world</code>目录下，找到配置文件<code>config.json</code>和<code>sscconfig.json</code></p>
+<p><img loading="lazy" src="https://img.0pt.im/game/built-tr/1-3.png" alt=""  />
+</p>
+<p>这是tshock的配置文件，可以参考下面我的配置文件进行更改。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-config.json" data-lang="config.json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;Settings&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;ServerPassword&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>  <span class="c1">// 服务器密码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ServerPort&#34;</span><span class="p">:</span> <span class="mi">7777</span><span class="p">,</span>  <span class="c1">// 服务器端口
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaxSlots&#34;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1">// 最大玩家槽位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ReservedSlots&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1">// 预留槽位
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ServerName&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>  <span class="c1">// 服务器名称
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;UseServerName&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 使用服务器名称
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;LogPath&#34;</span><span class="p">:</span> <span class="s2">&#34;tshock/logs&#34;</span><span class="p">,</span>  <span class="c1">// 日志路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DebugLogs&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 调试日志
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableLoginBeforeJoin&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 加入前禁止登录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;IgnoreChestStacksOnLoad&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 加载时忽略储物箱叠放
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;WorldTileProvider&#34;</span><span class="p">:</span> <span class="s2">&#34;default&#34;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;AutoSave&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 自动保存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AnnounceSave&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 保存时公告
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ShowBackupAutosaveMessages&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 显示备份和自动保存信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BackupInterval&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1">// 备份间隔
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BackupKeepFor&#34;</span><span class="p">:</span> <span class="mi">240</span><span class="p">,</span>  <span class="c1">// 保留备份时间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SaveWorldOnCrash&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 崩溃时保存世界
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SaveWorldOnLastPlayerExit&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 最后一个玩家退出时保存世界
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;InvasionMultiplier&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// 入侵倍增器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DefaultMaximumSpawns&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="c1">// 默认最大生成数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DefaultSpawnRate&#34;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span>  <span class="c1">// 默认生成速率
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;InfiniteInvasion&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 无限入侵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;PvPMode&#34;</span><span class="p">:</span> <span class="s2">&#34;normal&#34;</span><span class="p">,</span>  <span class="c1">// PvP模式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SpawnProtection&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 出生点保护
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SpawnProtectionRadius&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1">// 出生点保护半径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RangeChecks&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 范围检查
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;HardcoreOnly&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 仅极限模式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MediumcoreOnly&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 仅中核模式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SoftcoreOnly&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 仅软核模式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableBuild&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止建筑
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableHardmode&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止极限模式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableDungeonGuardian&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止地牢守卫者
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableClownBombs&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止小丑炸弹
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableSnowBalls&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止雪球
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableTombstones&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止墓碑
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisablePrimeBombs&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止机械首领炸弹
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ForceTime&#34;</span><span class="p">:</span> <span class="s2">&#34;normal&#34;</span><span class="p">,</span>  <span class="c1">// 强制时间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableInvisPvP&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁止隐形PvP
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaxRangeForDisabled&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1">// 禁用的最大范围
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RegionProtectChests&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 区域保护储物箱
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RegionProtectGemLocks&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 区域保护宝石锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;IgnoreProjUpdate&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 忽略投射物更新
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;IgnoreProjKill&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 忽略投射物击杀
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowCutTilesAndBreakables&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;AllowIce&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 允许冰
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowCrimsonCreep&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 允许猩红蔓延
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowCorruptionCreep&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 允许腐化蔓延
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowHallowCreep&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 允许神圣蔓延
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;StatueSpawn200&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;StatueSpawn600&#34;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>  
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;StatueSpawnWorld&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;PreventBannedItemSpawn&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 防止被封禁物品生成
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;PreventDeadModification&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 防止死亡修改
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;PreventInvalidPlaceStyle&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 防止无效的放置样式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ForceXmas&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 强制圣诞节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ForceHalloween&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 强制万圣节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowAllowedGroupsToSpawnBannedItems&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 允许有权限的组生成被封禁物品
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RespawnSeconds&#34;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>  <span class="c1">// 重生时间（秒）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RespawnBossSeconds&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1">// Boss战重生时间（秒）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AnonymousBossInvasions&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 匿名Boss入侵
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaxHP&#34;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>  <span class="c1">// 最大生命值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaxMP&#34;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>  <span class="c1">// 最大魔力值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BombExplosionRadius&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="c1">// 炸弹爆炸半径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;GiveItemsDirectly&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 直接给予物品
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DefaultRegistrationGroupName&#34;</span><span class="p">:</span> <span class="s2">&#34;default&#34;</span><span class="p">,</span>  <span class="c1">// 默认注册组名称
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DefaultGuestGroupName&#34;</span><span class="p">:</span> <span class="s2">&#34;guest&#34;</span><span class="p">,</span>  <span class="c1">// 默认访客组名称
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RememberLeavePos&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 记住离开位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaximumLoginAttempts&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1">// 最大登录尝试次数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnMediumcoreDeath&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 中核模式死亡踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MediumcoreKickReason&#34;</span><span class="p">:</span> <span class="s2">&#34;死亡导致踢出&#34;</span><span class="p">,</span>  <span class="c1">// 中核模式踢出原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BanOnMediumcoreDeath&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 中核模式死亡封禁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MediumcoreBanReason&#34;</span><span class="p">:</span> <span class="s2">&#34;死亡导致封禁&#34;</span><span class="p">,</span>  <span class="c1">// 中核模式封禁原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableDefaultIPBan&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁用默认IP封禁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;EnableWhitelist&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 启用白名单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;WhitelistKickReason&#34;</span><span class="p">:</span> <span class="s2">&#34;您不在白名单中。&#34;</span><span class="p">,</span>  <span class="c1">// 白名单踢出原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ServerFullReason&#34;</span><span class="p">:</span> <span class="s2">&#34;服务器已满&#34;</span><span class="p">,</span>  <span class="c1">// 服务器已满原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ServerFullNoReservedReason&#34;</span><span class="p">:</span> <span class="s2">&#34;服务器已满。没有预留槽位。&#34;</span><span class="p">,</span>  <span class="c1">// 服务器已满没有预留槽位原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnHardcoreDeath&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 极限模式死亡踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;HardcoreKickReason&#34;</span><span class="p">:</span> <span class="s2">&#34;死亡导致踢出&#34;</span><span class="p">,</span>  <span class="c1">// 极限模式踢出原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BanOnHardcoreDeath&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 极限模式死亡封禁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;HardcoreBanReason&#34;</span><span class="p">:</span> <span class="s2">&#34;死亡导致封禁&#34;</span><span class="p">,</span>  <span class="c1">// 极限模式封禁原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickProxyUsers&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 踢出代理用户
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RequireLogin&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 需要登录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowLoginAnyUsername&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 允许任何用户名登录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;AllowRegisterAnyUsername&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 允许注册任何用户名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MinimumPasswordLength&#34;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1">// 最小密码长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BCryptWorkFactor&#34;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>  <span class="c1">// BCrypt工作因子
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableUUIDLogin&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁用UUID登录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickEmptyUUID&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 踢出空UUID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;TilePaintThreshold&#34;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>  <span class="c1">// 瓷砖绘制阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnTilePaintThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 瓷砖绘制阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaxDamage&#34;</span><span class="p">:</span> <span class="mi">51175</span><span class="p">,</span>  <span class="c1">// 最大伤害
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MaxProjDamage&#34;</span><span class="p">:</span> <span class="mi">51175</span><span class="p">,</span>  <span class="c1">// 最大投射物伤害
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnDamageThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 伤害阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;TileKillThreshold&#34;</span><span class="p">:</span> <span class="mi">1060</span><span class="p">,</span>  <span class="c1">// 瓷砖击杀阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnTileKillThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 瓷砖击杀阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;TilePlaceThreshold&#34;</span><span class="p">:</span> <span class="mi">1032</span><span class="p">,</span>  <span class="c1">// 瓷砖放置阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnTilePlaceThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 瓷砖放置阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;TileLiquidThreshold&#34;</span><span class="p">:</span> <span class="mi">1050</span><span class="p">,</span>  <span class="c1">// 瓷砖液体阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnTileLiquidThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 瓷砖液体阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ProjIgnoreShrapnel&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 投射物忽略破片
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ProjectileThreshold&#34;</span><span class="p">:</span> <span class="mi">1050</span><span class="p">,</span>  <span class="c1">// 投射物阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnProjectileThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 投射物阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;HealOtherThreshold&#34;</span><span class="p">:</span> <span class="mi">1050</span><span class="p">,</span>  <span class="c1">// 治愈他人阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;KickOnHealOtherThresholdBroken&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 治愈他人阈值破坏踢出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SuppressPermissionFailureNotices&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 抑制权限失败通知
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableModifiedZenith&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁用修改过的巅峰
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableCustomDeathMessages&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 禁用自定义死亡消息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;CommandSpecifier&#34;</span><span class="p">:</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span>  <span class="c1">// 命令指示符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;CommandSilentSpecifier&#34;</span><span class="p">:</span> <span class="s2">&#34;.&#34;</span><span class="p">,</span>  <span class="c1">// 静默命令指示符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableSpewLogs&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 禁用喷射日志
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisableSecondUpdateLogs&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 禁用第二次更新日志
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SuperAdminChatRGB&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">255</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">255</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">255</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;SuperAdminChatPrefix&#34;</span><span class="p">:</span> <span class="s2">&#34;(超级管理员) &#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;SuperAdminChatSuffix&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>  <span class="c1">// 超级管理员聊天前缀和后缀
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;EnableGeoIP&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 启用地理IP
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;DisplayIPToAdmins&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 向管理员显示IP
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ChatFormat&#34;</span><span class="p">:</span> <span class="s2">&#34;{1}{2}{3}: {4}&#34;</span><span class="p">,</span>  <span class="c1">// 聊天格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ChatAboveHeadsFormat&#34;</span><span class="p">:</span> <span class="s2">&#34;{2}&#34;</span><span class="p">,</span>  <span class="c1">// 头顶聊天格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;EnableChatAboveHeads&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 启用头顶聊天
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;BroadcastRGB&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">127</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">255</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="mi">212</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;StorageType&#34;</span><span class="p">:</span> <span class="s2">&#34;sqlite&#34;</span><span class="p">,</span>  <span class="c1">// 存储类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;SqliteDBPath&#34;</span><span class="p">:</span> <span class="s2">&#34;tshock.sqlite&#34;</span><span class="p">,</span>  <span class="c1">// SQLite数据库路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MySqlHost&#34;</span><span class="p">:</span> <span class="s2">&#34;localhost:3306&#34;</span><span class="p">,</span>  <span class="c1">// MySQL主机
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MySqlDbName&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>  <span class="c1">// MySQL数据库名称
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MySqlUsername&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>  <span class="c1">// MySQL用户名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;MySqlPassword&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>  <span class="c1">// MySQL密码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;UseSqlLogs&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 使用SQL日志
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RevertToTextLogsOnSqlFailures&#34;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1">// SQL失败后返回文本日志
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RestApiEnabled&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 启用REST API
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RestApiPort&#34;</span><span class="p">:</span> <span class="mi">7878</span><span class="p">,</span>  <span class="c1">// REST API端口
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;LogRest&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 记录REST请求
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;EnableTokenEndpointAuthentication&#34;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>  <span class="c1">// 启用令牌端点身份验证
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RESTMaximumRequestsPerInterval&#34;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>  <span class="c1">// 每个间隔的最大REST请求
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;RESTRequestBucketDecreaseIntervalMinutes&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1">// REST请求桶减少间隔（分钟）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ApplicationRestTokens&#34;</span><span class="p">:</span> <span class="p">{}</span>  <span class="c1">// 应用REST令牌
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sscconfig.json" data-lang="sscconfig.json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;Settings&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Enabled&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>  <span class="c1">// 强制开荒启用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;ServerSideCharacterSave&#34;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>  <span class="c1">// 服务器端角色保存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;LogonDiscardThreshold&#34;</span><span class="p">:</span> <span class="mi">250</span><span class="p">,</span>  <span class="c1">// 登录丢弃阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;StartingHealth&#34;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1">// 初始生命值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;StartingMana&#34;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>  <span class="c1">// 初始法力值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nt">&#34;StartingInventory&#34;</span><span class="p">:</span> <span class="p">[</span>  <span class="c1">// 初始物品清单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;netID&#34;</span><span class="p">:</span> <span class="mi">-15</span><span class="p">,</span>  <span class="c1">// 物品ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;prefix&#34;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1">// 前缀
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;stack&#34;</span><span class="p">:</span> <span class="mi">1</span>  <span class="c1">// 堆叠数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;netID&#34;</span><span class="p">:</span> <span class="mi">-13</span><span class="p">,</span>  <span class="c1">// 物品ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;prefix&#34;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1">// 前缀
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;stack&#34;</span><span class="p">:</span> <span class="mi">1</span>  <span class="c1">// 堆叠数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;netID&#34;</span><span class="p">:</span> <span class="mi">-16</span><span class="p">,</span>  <span class="c1">// 物品ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;prefix&#34;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1">// 前缀
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;stack&#34;</span><span class="p">:</span> <span class="mi">1</span>  <span class="c1">// 堆叠数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;WarnPlayersAboutBypassPermission&#34;</span><span class="p">:</span> <span class="kc">true</span>  <span class="c1">// 警告玩家绕过权限
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><h3 id="启动服务器">启动服务器</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it --rm -p 7777:7777 -v <span class="nv">$HOME</span>/terraria/world:/root/.local/share/Terraria/Worlds --name terraria ryshe/terraria:latest
+</span></span></code></pre></div><p>对于我来说是</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it --rm -p 7777:7777 -v /var/lib/docker/volumes/terraria/_data/terraria/world:/root/.local/share/Terraria/Worlds --name terraria ryshe/terraria:latest
+</span></span></code></pre></div><p>选择你作为服务器的世界。根据提示，开启泰拉瑞亚服务器。</p>
+<p><img loading="lazy" src="https://img.0pt.im/game/built-tr/1-4.png" alt=""  />
+</p>
+<p>现在来到服务器后台了。</p>
+<h1 id="管理此部分较为简陋">管理（此部分较为简陋)</h1>
+<p>在服务器后台，先给default组加权限。（default组是登录后玩家默认所在的组。）</p>
+<pre tabindex="0"><code>/group addperm default * !tshock.ignore.ssc
+</code></pre><p><img loading="lazy" src="https://img.0pt.im/game/built-tr/1-5.png" alt=""  />
+</p>
+<p>然后可以在服务端开账号。</p>
+<pre tabindex="0"><code>/user add name passwd default
+</code></pre><p>name是你的名字，也是你的账号。passwd是你的密码。default是你所在组。</p>
+<p>管理后关闭移除容器。</p>
+<h1 id="后台运行">后台运行</h1>
+<p>配置权限后， 将terraria后台运行</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -d -p 7777:7777 -v <span class="nv">$HOME</span>/terraria/world:/root/.local/share/Terraria/Worlds --name terraria -e <span class="nv">WORLD_FILENAME</span><span class="o">=</span>your.wld ryshe/terraria:latest
+</span></span></code></pre></div><p>对于我来说，是</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -d -p 7777:7777 -v /var/lib/docker/volumes/terraria/_data/terraria/world:/root/.local/share/Terraria/Worlds --name terraria -e <span class="nv">WORLD_FILENAME</span><span class="o">=</span>tuguige.wld ryshe/terraria:latest
+</span></span></code></pre></div><h1 id="注册登录">注册登录</h1>
+<p>打开游戏，连接你的泰拉瑞亚服务器。如果是搭建在本地。ip是 <code>localhost</code> 端口 <code>7777</code></p>
+<p>如果搭建在服务器，ip是你的服务器ip，端口7777，记得给服务器放行7777端口。</p>
+<p>创建一个角色，角色名就是你的账号。</p>
+<p>连接上服务器时，打开聊天栏，输<code>/help</code>获得帮助。</p>
+<p>如果没有账号，先注册一个 ，输<code>/register passwd</code></p>
+<p>passwd是你的密码。你的账号是用户名。</p>
+<p>然后再<code>/login passwd</code>。</p>
+<p>完成。</p>
+<h1 id="后记">后记</h1>
+<p>对管理部分的参考。</p>
+<p><a href="https://www.taozi1.com/16620.html">https://www.taozi1.com/16620.html</a></p>
+<p><a href="https://ikebukuro.tshock.co/">https://ikebukuro.tshock.co/</a></p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
