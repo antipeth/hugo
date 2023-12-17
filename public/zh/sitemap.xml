@@ -212,5 +212,9 @@
     <loc>https://blog.0pt.im/archives/</loc>
   </url><url>
     <loc>https://blog.0pt.im/search/</loc>
+  </url><url>
+    <loc>https://blog.0pt.im/zh/posts/learn/build-hugo/</loc>
+  </url><url>
+    <loc>https://blog.0pt.im/zh/posts/learn/init-eos-linux/</loc>
   </url>
 </urlset>

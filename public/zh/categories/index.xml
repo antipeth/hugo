@@ -1,56 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on 春风少年兄</title>
     <link>https://blog.0pt.im/zh/categories/</link>
     <description>Recent content in Categories on 春风少年兄</description>
-    <image>
-      <title>春风少年兄</title>
-      <url>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
-      <link>https://blog.0pt.im/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
-    </image>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sun, 05 Nov 2023 00:48:58 +0800</lastBuildDate><atom:link href="https://blog.0pt.im/zh/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 05 Nov 2023 00:48:58 +0800</lastBuildDate>
+    <atom:link href="https://blog.0pt.im/zh/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>游</title>
       <link>https://blog.0pt.im/zh/categories/%E6%B8%B8/</link>
       <pubDate>Sun, 05 Nov 2023 00:48:58 +0800</pubDate>
-      
       <guid>https://blog.0pt.im/zh/categories/%E6%B8%B8/</guid>
       <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
     </item>
-    
     <item>
       <title>感</title>
       <link>https://blog.0pt.im/zh/categories/%E6%84%9F/</link>
       <pubDate>Mon, 23 Oct 2023 00:48:58 +0800</pubDate>
-      
       <guid>https://blog.0pt.im/zh/categories/%E6%84%9F/</guid>
       <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
     </item>
-    
     <item>
       <title>音乐</title>
       <link>https://blog.0pt.im/zh/categories/%E9%9F%B3%E4%B9%90/</link>
       <pubDate>Tue, 05 Sep 2023 00:48:58 +0800</pubDate>
-      
       <guid>https://blog.0pt.im/zh/categories/%E9%9F%B3%E4%B9%90/</guid>
       <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
     </item>
-    
     <item>
       <title>学</title>
       <link>https://blog.0pt.im/zh/categories/%E5%AD%A6/</link>
       <pubDate>Mon, 07 Aug 2023 18:17:28 +0800</pubDate>
-      
       <guid>https://blog.0pt.im/zh/categories/%E5%AD%A6/</guid>
       <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

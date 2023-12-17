@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hugo博客 on 春风少年兄</title>
+    <link>https://blog.0pt.im/tags/hugo%E5%8D%9A%E5%AE%A2/</link>
+    <description>Recent content in hugo博客 on 春风少年兄</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 17 Dec 2023 18:17:28 +0800</lastBuildDate>
+    <atom:link href="https://blog.0pt.im/tags/hugo%E5%8D%9A%E5%AE%A2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于Arch Linux搭建hugo博客</title>
+      <link>https://blog.0pt.im/learn/3-1/</link>
+      <pubDate>Sun, 17 Dec 2023 18:17:28 +0800</pubDate>
+      <guid>https://blog.0pt.im/learn/3-1/</guid>
+      <description>1.本地搭建hugo 本篇基于的环境是arch linux。&#xA;安装go语言：&#xA;yay -S go 安装hugo：&#xA;yay -S gohugo-extended-bin 创建博客文件：&#xA;hugo new site myblog 该操作会创建一个博客文件夹，并在里面生成博客文件&#xA;myblog 可以替换成你想要的博客文件夹的名字。&#xA;进入博客文件夹的根目录里面。&#xA;cd myblog 下载博客主题，这里选用的是stack 主题。&#xA;git clone https://github.com/CaiJimmy/hugo-theme-stack/ themes/hugo-theme-stack 将博客主题中的的exampleSite 复制到博客的根目录。&#xA;cp -r themes/hugo-theme-stack/exampleSite/* ./ 将博客原来的配置文件hugo.toml删除。&#xA;rm -r hugo.toml 主题中的exampleSite已经给我们提供了一个配置文件config.yaml，接下来我们配置config.yaml文件。可以参考官方文档与其他人的教程来配置。&#xA;渲染博客&#xA;hugo 这个命令会将你更新的文章与配置文件，还有修改的前端文件，在public文件夹里面生成相应的网页文件。最后别人看到的博客其实就是public里面的文件。&#xA;预览博客&#xA;hugo server 现在，打开本地浏览器打开http://localhost:1313 ，即可看见你的博客。&#xA;至此本地搭建hugo完成。&#xA;在本地更新的文章与配置文件，还有修改的前端文件，之后查看效果。确认无误后，运行hugo 命令渲染生成网页文件后，我们可以开始把博客推送到托管平台上面。&#xA;2.配置git 先注册一个github&#xA;生成密钥，在本地运行，(中间需要输入的可以直接回车即可)：&#xA;ssh-keygen -t rsa 然后根据他的默认路径（对于我来说是/home/opeth/.shh）,找到id_rsa.pub&#xA;文件。&#xA;打开id_rsa.pub文件，将其中的内容全部复制。&#xA;来到github页面登录后。&#xA;点击头像。&#xA;点击设置。&#xA;点击SSH and GPG keys 。&#xA;点击新增SSH密钥。&#xA;依次点击。创建一个新的仓库。&#xA;创建成功。</description>
+    </item>
+    <item>
+      <title>配置Eos Linux</title>
+      <link>https://blog.0pt.im/learn/2-1/</link>
+      <pubDate>Fri, 15 Dec 2023 18:17:28 +0800</pubDate>
+      <guid>https://blog.0pt.im/learn/2-1/</guid>
+      <description>基本 systemctl stop reflector.service systemctl disable reflector.service eos-update sudo pacman -S yay yay -Syyu sudo pacman -S paru sudo pacman -S pacman-contrib sudo pacman -S discover sudo pacman -S filelight yay -S marktext-bin yay -S octopi yay -S brave-bin yay -S keepassxc sudo pacman -S libreoffice-still libreoffice-still-zh-cn sudo pacman -S firefox-developer-edition sudo pacman -S vlc sudo pacman -S thunderbird thunderbird-i18n-zh-cn sudo pacman -S obs-studio yay -S schildichat-desktop-bin sudo pacman -S tabby-bin paru -S vscodium-bin 安装fcitx5-rime输入法 sudo pacman -S fcitx5-im sudo pacman -S fcitx5-material-color sudo pacman -S fcitx5-rime yay -S ruby 这里直接使用自动部署脚本。</description>
+    </item>
+  </channel>
+</rss>

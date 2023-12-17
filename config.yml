@@ -16,7 +16,7 @@ minify:
   minifyOutput: true
 
 defaultContentLanguage: zh # 最顶部首先展示的语言页面
-defaultContentLanguageInSubdir: true
+defaultContentLanguageInSubdir: false
 
 params: 
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
